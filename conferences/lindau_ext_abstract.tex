@@ -1,0 +1,466 @@
+\documentclass[hidelinks]{article}
+\usepackage[a4paper, margin = 1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{blindtext}
+\usepackage{authblk}
+\usepackage{placeins}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{doi}
+\usepackage[skip=2pt]{caption}
+\usepackage[style = authoryear]{biblatex} 
+\usepackage{import}
+\usepackage{multirow,array}
+
+\title{Job Search Behaviour and the Labour Market: \\[1ex] \large Incorporating behavioural data to model unequal outcomes}
+\author[1,2,3]{Ebba Mark}
+\author[4,5]{Maria del Rio-Chanona}
+\author[1,2]{Stefania Innocenti}
+
+
+\affil[1]{\small \emph{Institute for New Economic Thinking, Oxford Martin School, University of Oxford}}
+\affil[2]{\small \emph{Smith School of Enterprise and the Environment, University of Oxford}}
+\affil[3]{\small \emph{Calleva Research Centre for Evolution and Human Science, Magdalen College, University of Oxford}}
+\affil[4]{\small \emph{Bennett Institute for Public Policy, University of Cambridge}}
+\affil[5]{\small \emph{University College London\vspace{-2em}}}
+
+
+\addbibresource{em_si_mdrc.bib}
+\begin{document}
+\setlength\parskip{1em plus 0.1em minus 0.2em}
+\input{format.tikz}
+
+\maketitle
+
+\begin{abstract}
+Adapting to economic change—whether driven by recessions, industrial policy, or structural shifts in labor demand—inevitably encounters labor market frictions. These frictions vary across regions, occupations, and demographic groups, increasing the risk of certain populations being left behind. Developing cost-effective policies to mitigate these disparities has become a key priority. Agent-based modeling has emerged as a valuable tool for understanding labor market adjustments to macroeconomic shocks. This study advances the capabilities of a leading data-driven network model of worker transitions by integrating behavioral foundations grounded in detailed microdata. Job search efforts by unemployed or displaced workers do not occur in isolation; they are shaped by both individual factors (such as risk aversion, wage expectations, and discouragement) and external conditions (including competition, labor market health, and employer discrimination). By incorporating a more comprehensive representation of worker decision-making, this work enhances the model’s ability to simulate the heterogeneous social and economic impacts of a net-zero transition on different people and places. In doing so, it enables a deeper exploration of critical labor market phenomena, including long-term unemployment dynamics, gender wage disparities, and the uneven distribution of wage gains during structural change.
+
+\end{abstract}
+
+
+\emph{\textcolor{red}{Note: The following is an extended abstract of a work in progress. The final section of this manuscript details forthcoming additions to this work to be implemented by June 2025.}}
+
+\section{Introduction}
+
+\textbf{Structural transformation, business cycles, and other forces of economic change are often accompanied by heterogeneous labour market frictions.} Consider the fate of individuals whose jobs face redundancy as a result of green industrial policy, rural communities reliant on economically non-diverse local labour markets, or the canonical example of how men and women navigate the labour market differently. As such, insulating people and places against forces of economic change, whether they be structural, cyclical, or temporary in nature, has been and remains a considerable policy challenge for institutions worldwide. 
+
+\textbf{Agent-based models (ABMs) have emerged as a useful tool for modelling labour market dynamics and macro-economic adjustment processes \parencite{cincottiWhyWeNeed2022, dawidAgentBasedMacroeconomics2018, leijonhufvudChapter36AgentBased2006, neugartAgentbasedModelsLabor2012}}.\footnote{Examples of applications include studies on the effect of structural reform policy on unemployment and income inequalities \parencite{dosiEffectsLabourMarket2018}; the relationship between employment protection legislation and unemployment with an endogenised institutional setting in which workers can vote to influence the employment protection legislation \parencite{martinShocksEndogenousInstitutions2009}; and an investigation of the effect of social networks on job market and upskilling effort \parencite{gemkowReferralHiringEndogenous2011}.}  They provide considerable flexibility in comparison to classical models by accommodating non-linearities, non-market interactions, out-of-equilibrium dynamics, interactive or feedback effects, and behavioural heterogeneity \cite{cincottiWhyWeNeed2022}. Some notable examples include \cite{dosiEffectsLabourMarket2018, gemkowReferralHiringEndogenous2011, polednaEconomicLabourMarket2024, martinShocksEndogenousInstitutions2009, berrymanModellingLabourMarket2023}. More broadly, agent-based modelling provides a useful venue through which to integrate insights from multiple disciplines beyond economics \cite{savinAgentbasedModelingIntegrate2023}. Indeed, agent-based modelling might provide one of the more straight-forward ways in which to do so as it requires incorporating insights from macro, meso, and micro level disciplines. Thus, these models are exceptionally well-suited to analyse the inherently cross-discipline, cross-policy, and otherwise \emph{cross-cutting} nature of socio-economic transformation. 
+
+\textbf{However, thus far, agent-based labour market models have neglected the role of behaviour in job search processes despite their role in determining heterogeneous outcomes across geographies and demographics \cite{neugartAgentbasedModelsLabor2012}.} This oversight has persisted despite the fact that agent-based models (1) allow for a departure from typical “rational agent” paradigms in more conventional labour market models through the definition of agent-specific behavioural rules and, more importantly; (2) the fact that worker behaviour at the individual or community level comprise the macro-level dynamics of interest to policy-makers; and (3) the field of behavioural labour economics provides a wealth of theoretical, experimental, and empirical evidence as to the behavioural biases that motivate heterogeneous job search strategies. 
+
+\textbf{Job search behaviour not only underlies the labour market adjustment process itself but also contributes to stubborn labour market inefficiencies - gender wage gaps, urban-rural divides, and long-term unemployment - whose interactions with forces of economic change are of considerable interest to policy-makers in the face of emerging systemic challenges such as climate change, net-zero policy, automation, and an aging population.}
+
+\textbf{As such, this work outlines the theoretical and methodological basis for incorporating behavioural heterogeneity into an agent-based labour market model. } We apply this work to data from the US labour market, emphasizing the significant potential for replication across other national or regional contexts. 
+
+\textbf{We contribute to three relevant streams of literature within both labour and behavioural labour economics}. First, we incorporate insights from the wealth of literature on the relative importance of duration dependence and dynamic selection in determining (long-term) unemployment duration. Second, we marry considerations of both the macro and micro level determinants of job search. In other words, we bring together a wealth of insights into the determinants of job search effort of both unemployed and employed workers that are both within and beyond the control of job-seekers themselves. Third, we make a first attempt at establishing a set of parsimonious behavioural micro foundations in an agent-based labour market model. An important yet often underexplored benefit of working with agent-based models is precisely the ability to incorporate more realistic behavioural rules into economic agents. This freedom naturally comes with the important responsibility on the modeller to ensure such behavioural rules are meticulously chosen, informed by data, and free of researcher bias.
+
+In what follows, we outline first, the model, data, and calibration procedure employed; second, an overview of various validation exercises; third, forthcoming additions to this work currently underway; and finally, conclude with a discussion of the potential for this work to inform labour market modeling with greater simulation fidelity for the benefit of more socially supportive policy-making.
+
+\section{Methods \& Materials}
+\subsection{Model}
+\subsubsection{Labour Supply and Demand}
+
+In this work, we build an agent-based model using the occupational mobility network constructed in \cite{delrio-chanonaOccupationalMobilityAutomation2021}.  In brief, the model simulates the search-and-matching process of a labour market in which unemployed workers in various occupations search and fill available vacancies, akin to search-and-matching models proposed by other authors \cite{pissaridesShortRunEquilibriumDynamics1985, mortensenJobCreationJob1994}. The original execution of the model in del Rio-Chanona et al. \cite{delrio-chanonaOccupationalMobilityAutomation2021} is represented in \ref{fig:lm_model_structure} below.
+
+\begin{center}
+\includegraphics[scale = 0.1]{figs/rsif_model_order.jpeg}
+\label{fig:lm_model_structure}
+\end{center}
+
+As shown in Figure \ref{fig:lm_model_structure}, the central entities represented in the model are workers and vacancies. Workers have state variables for their current or latest held occupation, a record of the amount of time periods spent unemployed, current or latest held wage, gender, and their degree of risk aversion. Vacancies have state variables for the relevant occupation and wage offer.
+
+The main processes of the model, which are repeated at every time step are: 
+\begin{itemize}
+    \item State-dependent vacancy creation process 
+    \item State-dependent separation process
+    \item Unemployed workers apply to available open vacancies
+    \item Vacancies hire an applicant
+\end{itemize}
+
+Though the underlying dynamics of the model are outlined in greater detail in \cite{delrio-chanonaOccupationalMobilityAutomation2021}, we briefly outline the central functionality below.
+
+Vacancies are created and workers are separated from jobs as a function of both a spontaneous factor ($\delta_{v}$, $\delta_{u}$ respectively) independent of economic conditions and a state-dependent factor ($\alpha_{v}$, $\alpha_{u}$ respectively)  which adjusts to changes in economic conditions. Occupational labour demand consistently responds to close a gap between an imposed target demand $d_{i,t}^{\dagger}$ and the realised demand $d_{i,t}$ measured as the sum of vacancies $v_{i,t}$ and employment  $e_{i,t}$ in occupation $i$ at time $t$. Target demand $d_{i,t}^{\dagger}$ is initialised as the realised occupation-specific demand in 2016 as reported by the US Census Bureau and Bureau of Labor Statistics and fluctuates in response to changes in US GDP \cite{floodIntegratedPublicUse2020}. 
+
+\begin{equation}
+d_{i,t} = e_{i,t} + v_{i,t}
+\end{equation}
+\begin{equation}
+\alpha_{u,i,t} = \gamma_u \frac{\max\{0, d_{i,t} - d_{i,t}^{\dagger} \}}{e_{i,t}}
+\end{equation}
+
+\begin{equation}
+\alpha_{v,i,t} = \gamma_v \frac{\max\{0, d_{i,t}^{\dagger} - d_{i,t} \}}{e_{i,t}}
+\end{equation}
+
+\(\gamma_u\) and \(\gamma_v\) are parameters that determine the speed of adjustment to close the gap between the occupational target demand and realised demand. The \(\alpha\)'s are inherently probabilities and must satisfy \(0 \leq \alpha_{u,i,t} \leq 1\) and \(0 \leq \alpha_{v,i,t} \leq 1\).  Thus, the probability that a worker is separated $\pi_{u,i,t}$ is given by
+
+\begin{equation}
+\pi_{u,i,t} = 1 - (1 - \delta_u)(1 - \alpha_{u,i,t}) = \delta_u + \alpha_{u,i,t} - \delta_u \alpha_{u,i,t}
+\end{equation}
+
+Similarly, the probability that a vacancy opens is $\pi_{v,i,t}$ given by
+
+\begin{equation}
+\pi_{v,i,t} = \delta_v + \alpha_{v,i,t} - \delta_v \alpha_{v,i,t}.
+\end{equation}
+
+As such, the model is initialised with the following economic parameters...:
+\noindent
+$\gamma_{v}$: Speed with which vacancy creation rate responds to fluctuations in demand. \\
+$\gamma_{u}$: Speed with which separation rate responds to fluctuations in demand. \\
+$\delta_{v}$: Spontaneous vacancy creation rate \\
+$\delta_{u}$: Spontaneous separation rate\\
+
+...the following occupation-specific data...:
+\begin{itemize}
+    \item Employment levels
+    \item Unemployment levels
+    \item Gender share of employment
+    \item Median wage
+
+ ...and an occupational mobility network as constructed in \cite{delrio-chanonaOccupationalMobilityAutomation2021}. In brief, the occupational mobility network's nodes represent different occupations connected by edges that correspond to the probability that workers transition between them. In this particular occupational mobility network, there are 464 occupational nodes and the edge weights were derived using the methodology of \cite{mealyWhatYouWork2018}.
+
+\subsubsection{Agent Job Search Behaviour}
+
+A wealth of literature deduces that job search effort is responsive to conditions at the micro, meso, and macro levels. In other words, the effort an individual exerts in a job search process is determined by individual idiosyncracies or heterogeneity, meso-level competition for relevant vacancies within a network of attainable occupations, and the overall health of the macroeconomy. 
+
+We draw on the methodology proposed by \cite{muellerJobSeekersPerceptions2021}, \cite{mukoyamaJobSearchBehavior2018}, and \cite{eeckhoutUnemploymentCycles2019} to form the data-driven basis for these effects in our model. These three works stand out within the canon that seeks to disentangle the determinants of job-finding probability and job search behaviour by virtue of their operationalisation of micro-level data. More precisely, using the methodology proposed in each of these articles we arrive at three important inputs to the job search behaviour of the agents in our model:
+
+1. The role of \textbf{duration dependence} in individual job search behaviour. More precisely, an individual's job search effort declines as a function of time spent unemployed. This effect has been observed in several empirical studies and are most often attributed to worker discouragement or employer discrimination \cite{muellerJobSeekersPerceptions2021}
+2. The \textbf{job search behaviour of unemployed workers is anti-cyclical}. More precisely, it has been found that unemployed job-seekers exert greater effort at the intensive margin in economic downturns \cite{mukoyamaJobSearchBehavior2018}.
+3. The\textbf{ propensity for employed job-seekers to enter the job search demonstrates a pro-cyclical relationship}, leading to greater competition in times of economic recovery or booms \cite{eeckhoutUnemploymentCycles2019}.
+
+\textbf{Operationalising Job Search Effort}
+This work aims to harness the potential of research insights from behavioural labour economics to inform the behaviour of agents in the model. More specifically, this work introduces dynamic and heterogeneous behavioural rules in the job search process embedded in the aforementioned model (see gray circle in Figure \ref{fig:lm_model_structure}). Figure \ref{fig:search_unemp} represents the proposed decision-making process of an unemployed worker when searching for a job.
+
+\begin{figure}
+    \caption{Search Process of Unemployed Job-Seekers}
+    \begin{tikzpicture}[node distance=2cm]
+    \node (start) [startstop] {Begin time step unemployed};
+    \node (pro1a) [process, below of=start] {Find \emph{n} vacancies};
+    \node (pro1) [process, below of=pro1a] {Rank \emph{n} vacancies};
+    \node (in1) [io, left of=pro1, xshift = -3 cm] {$u_{v} = \alpha \Delta wage - \beta \Delta location + \gamma \Delta skills...$};
+    \node (dec1) [decision, below of=pro1, yshift=-1cm] {Acceptable open vacancies?};
+    \node (pro2) [process, right of =dec1, yshift=2cm, xshift = 3 cm] {Update Search Effort};
+    \node (dec2) [process, below of=dec1, yshift=-1.5cm] {Apply to $v/n$-tile of ranked vacancies};
+    \node (in2) [io, left of=dec2, xshift = -3 cm, yshift = -1 cm] {Aiming high or low: \\ ($\frac{v}{n}$-tile)};
+    \node (in3) [io, left of=dec2, xshift = -2.5 cm, yshift = 1 cm] {Search effort (\emph{v})};
+    \node (pro3) [process, below of =dec2]{Hired?};
+    \node (stopemp) [startstop, below of = pro3, yshift = -1 cm, xshift = -3 cm] {End time step employed};
+    \node (stopunemp) [startstop, below of = pro3, yshift = -1 cm, xshift = 3 cm] {End time step unemployed};
+    
+    \draw [arrow] (start) -- (pro1a);
+    \draw [arrow] (pro1a) -- (pro1);
+    \draw [arrow] (in1) -- (pro1);
+    \draw [arrow] (in2) -- (dec2);
+    \draw [arrow] (pro1) -- (dec1);
+    \draw [arrow] (dec2) -- (pro3);
+    \draw [arrow] (dec1) -- node[anchor=east] {yes} (dec2);
+    \draw [arrow] (stopunemp) -| node[anchor=north] {} ++(4,0) |- (pro2);
+    \draw [arrow] (pro3) -- node[anchor=east] {yes} (stopemp);
+    \draw [arrow] (pro3) -- node[anchor=east] {no} (stopunemp);
+    \draw [arrow] (pro2) |- node[anchor=north] {} (start);
+    \draw [arrow] (in3) -- (dec2);
+    \draw [arrow] (dec1) -| node[anchor=north] {no} ++(4,0)  -| (pro2);
+    %\draw [arrow] (dec2) --  node[anchor=east, above=2pt ] {} ++(7,0) |- (start);
+    \end{tikzpicture}
+    \label{fig:search_unemp}
+\end{figure}
+
+\FloatBarrier
+
+A worker enters a time step unemployed with memory of the wage and occupation of their latest held job and awareness of the amount of time spent unemployed. First, an unemployed worker $w$ "finds" a subset of vacancies $\{1,...,n\}$ in occupations that share a non-zero weighted edge with their latest held occupation. Assuming that workers do not have perfect information on all available vacancies, $n$ is smaller than the total available vacancies in the economy that exist within neighboring occupations. 
+
+Within this sample of found vacancies, workers rank the vacancies according to Equation \ref{eq:utility_function} and apply to their $v$ top-rated vacancies. As the model is currently designed, the worker's utility function is represents a wage differential scaled by occupational similarity $\rho$ to proxy the extent to which a vacancy matches an applicant's job content criteria. In practice, this means that the reservation wage is higher (lower) when considering a dissimilar (similar) occupation.
+
+\begin{equation}
+    u_{w} = (wage_{offered} - wage_{current})*(1-\rho_{transition})
+    \label{eq:utility_fn}
+\end{equation}
+
+At this point, the behavioural attributes enter the stylized process. First, we incorporate a dynamic application effort represented in Equation \ref{eq:search_effort_function}. In the case of our study, a worker's application effort is represented by the amount of vacancies $v$ that they apply to in a given time step. This value is a function of the amount of time spent unemployed and a measure of economic health. $v$ has a mean value $\bar{v}$ which represents the mean applications sent by an applicant in a given time period. We assume that after a certain amount of time spent unemployed $\tau$  workers begin to feel discouraged and reign in their search effort. We do not allow for unemployed job-seekers to apply to zero vacancies. 
+
+\begin{equation}
+v_w(t, t_{\text{unemp}}) = \left[\bar{v} + \beta (1 - \Phi(t))\right] \max(1, \lambda (t_{\text{unemp}} - \tau)) + 1 
+\label{eq:search_effort_function}
+\end{equation}
+\begin{equation}
+v_w(t, t_{\text{unemp}}) =
+\begin{cases}
+    \left[\bar{v} + \beta (1 - \Phi(t))\right] \lambda (t_{\text{unemp}} - \tau) + 1, & \text{if } t_{\text{unemp}} > \tau \\
+    \left[\bar{v} + \beta (1 - \Phi(t))\right], & \text{if } t_{\text{unemp}} \leq \tau
+\end{cases}
+\label{eq:search_effort_function}
+\end{equation}
+
+
+Finally, a worker is defined by a 'risk aversion parameter which determines the extent to which they maximize their utility. More specifically, the worker's level of 'risk aversion' will determine which range of the ranked \emph{n} they apply to (ie. the $\frac{v}{n}$-tile of the ranked \emph{n} vacancies). 
+
+\begin{figure}
+    \caption{Search Process of Employed Job-Seekers}
+    \begin{tikzpicture}[node distance=2cm]
+    \node (start) [startstop] {Begin time step employed};
+     \node (proa) [process, below of =start]{Decide to search?};
+    \node (pro1a) [process, below of=proa, xshift = -3 cm] {Find \emph{n} vacancies};
+    \node (pro1) [process, below of=pro1a] {Rank \emph{n} vacancies};
+    \node (in1) [io, left of=pro1, xshift = -3 cm] {$u_{v} = \alpha \Delta wage + \gamma \Delta skills...$};
+    \node (dec1) [decision, below of=pro1, yshift=-1cm] {Acceptable open vacancies?};
+    \node (dec2) [process, below of=dec1, yshift=-1.5cm] {Apply to $\bar{v}$ top-ranked vacancies};
+    \node (pro3) [process, below of =dec2]{Hired?};
+    \node (pro4) [process, right of =pro3, xshift = 3cm]{Separated?};
+    \node (stopreemp) [startstop, below of = pro3, yshift = -1 cm, xshift = -2 cm] {End time step re-employed};
+    \node (stopunemp) [startstop, below of = pro3, yshift = -1 cm, xshift = 3 cm] {End time step unemployed};
+        \node (stopemp) [startstop, right of= stopunemp,  xshift = 3 cm] {End time step employed};
+    
+    \draw [arrow] (start) -- (proa);
+     \draw [arrow] (proa) -- (pro1a);
+    \draw [arrow] (pro1a) -- (pro1);
+    \draw [arrow] (in1) -- (pro1);
+    \draw [arrow] (pro1) -- (dec1);
+    \draw [arrow] (dec2) -- (pro3);
+    \draw [arrow] (proa) -- node[anchor=north] {no} ++(4,0) |- (pro4); % Moves horizontally first, then down
+    \draw [arrow] (dec1) -- node[anchor=east] {yes} (dec2);
+    \draw [arrow] (proa) -- node[anchor=east] {yes} (pro1a);
+    \draw [arrow] (pro3) -- node[anchor=east] {yes} (stopreemp);
+    \draw [arrow] (pro3) -- node[anchor=north] {no} (pro4);
+    \draw [arrow] (dec1) -| node[anchor=north] {no} ++(4,0)  -| (pro4);
+        \draw [arrow] (pro4) -- node[anchor=east] {yes} (stopunemp);
+    \draw [arrow] (pro4) -- node[anchor=east] {no} (stopemp);
+    \end{tikzpicture}
+    \label{fig:search_emp}
+\end{figure}
+
+Thus, we also initialise the model with the following behavioural parameters...:
+$\beta_{w}$: Responsiveness of worker search effort to economic health. \\
+$\phi_{w}$: Propensity with which employed workers resort to job-seeking. \\
+$\lambda$: Speed with which search effort declines as a function of time. \\
+$r$: Degree of risk aversion
+
+
+\end{itemize}
+
+
+\subsubsection{Calibration}
+
+Calibration describes the process of improving a model's realism by adjusting its parameters according to empirical data. This is a fundamental requirement to ensure the model has credible simulation fidelity. A necessary corollary of this statement is that credible calibration is fundamental to drawing conclusions and policy recommendations from any model output. Unsurprisingly, actions and interactions of interest within social dynamic systems are not always, and in fact rarely, directly observed. In such cases, calibration is relatively difficult. Several options are available that vary both in sophistication and data requirements. \footnote{\cite{plattComparisonEconomicAgentbased2020} provide a comprehensive overview of available calibration methods divided into three distinct classes: direct observation, analytical methods, and simulation-based methods. The latter of the three is further sub-categorised into frequentist (distance- or likelihood-based) versus Bayesian (likelihood-based) methods. In the case in which the output of a proposed model is observable, for example via detailed micro data, graph neural networks could aid simulation-based inference methods as proposed in \cite{dyerCalibratingAgentbasedModels2022}.}
+
+The proposed model builds on the aforementioned four parameters (four economic and four behavioural). To calibrate the economic parameters, we employ approximate Bayesian computation methods which rely on Monte Carlo simulations drawing from defined prior distributions of each parameter to triangulate the parameter combination that best replicates relevant empirical relationships \cite{dyerCalibratingAgentbasedModels2022, dyerBlackboxBayesianInference2024}. To calibrate the behavioural parameters, we rely on micro data from the Current Population Survey, the American Time Use Survey, and the Survey of Consumer Expectations expanding on data produced by \cite{mukoyamaJobSearchBehavior2018, eeckhoutUnemploymentCycles2019, muellerJobSeekersPerceptions2021}.  \\ We perform this calibration using the \emph{pyabc} package in Python.
+
+We calibrate our economic parameters separately for the behavioural and non-behavioural model to match observed unemployment and vacancy rate data from 2000-2019. Exploring the joint parameter space of the economic parameters, we aim to jointly minimise the distance between our simulated unemployment and vacancy rates to those observed between 2000-2019 (Figure \ref{fig:uer_vac_rate}) and, by extension, the Beveridge curve relationship between these two rates from the same time period, represented in Figure \ref{fig:beveridge_curve}). 
+
+In the following plots, we minimise the distance between our two simulated and real time series via mean and variance matching (sum of squared errors normalised by each series' variance) and shape matching (via dynamic time warping normalised by each series' variance). In Figure \ref{fig:econ_params_dist_both},  sub-figures a-f demonstrate the kernel density of the selected posterior distributions of the four economic parameters. In both the behavioural and non-behavioural models, the parameters are well-identified. The greatest uncertainty surrounds the parameter estimate for $\gamma_{u}$. Figure \ref{fig:sim_results} demonstrate the simulated vacancy and unemployment rates using the calibrated parameter estimates. Both models show significant stability using these parameter estimates, however we are able to better match the post-2008 recession unemployment rate recovery in our behavioural model due to the incorporation of business-cycle responsive search effort on the part of unemployed workers. The vacancy rate remains difficult to match perfectly, and we aim to incorporate additional data from estimates of business confidence.
+
+\begin{figure}
+\centering
+\caption{\textbf{Calibration Results: Jointly minimising unemployment and vacancy rate loss}}
+\label{fig:econ_params_dist_both}
+
+\vspace{0.3cm} % Adjust vertical space
+    \centering
+    % Column Headers
+    \begin{minipage}{\textwidth}
+        \centering
+        \textbf{Non-behavioural model} \hspace{5cm} \textbf{Behavioural model}
+    \end{minipage}
+    
+    \vspace{0.3cm}
+    
+    % First Row
+    \begin{subfigure}{.48\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{figs/sims/output_04_01/calibration_behav_False_kde_matrix.png}
+        \caption{KDE Plots of Parameters $\gamma_{u}, \gamma_{v}, \delta_{u}, \delta_{v}$}
+        \label{fig:sfig1}
+    \end{subfigure} \hfill
+    \begin{subfigure}{.48\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{figs/sims/output_04_01/calibration_behav_True_kde_matrix.png}
+        \caption{KDE Plots of Parameters $\gamma_{u}, \gamma_{v}, \delta_{u}, \delta_{v}$}
+        \label{fig:sfig2}
+    \end{subfigure}
+    
+    \vspace{0.5cm}
+
+    % Third Row
+    \begin{subfigure}{.48\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{figs/sims/output_04_01/calibration_behav_False_joint_delta.png}
+        \caption{Joint contour plot $\delta_{u}, \delta_{v}$}
+        \label{fig:sfig5}
+    \end{subfigure} \hfill
+    \begin{subfigure}{.48\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{figs/sims/output_04_01/calibration_behav_True_joint_delta.png}
+        \caption{Joint contour plot $\delta_{u}, \delta_{v}$}
+        \label{fig:sfig6}
+    \end{subfigure}
+
+    \vspace{0.5cm}
+
+    % Fourth Row
+    \begin{subfigure}{.48\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{figs/sims/output_04_01/calibration_behav_False_joint_gamma.png}
+        \caption{Joint contour plot $\gamma_{u}, \gamma_{v}$}
+        \label{fig:sfig7}
+    \end{subfigure} \hfill
+    \begin{subfigure}{.48\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{figs/sims/output_04_01/calibration_behav_True_joint_gamma.png}
+        \caption{Joint contour plot $\gamma_{u}, \gamma_{v}$}
+        \label{fig:sfig8}
+    \end{subfigure}
+
+    \caption{Comparison of Non-behavioural and Behavioural Models}
+    \label{fig:comparison}
+\end{figure}
+
+\FloatBarrier
+
+\begin{figure}[ht]
+    \vspace{0.5cm}
+
+    % Second Row
+    \begin{subfigure}{.48\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{figs/sims/output_04_01/calibration_behav_False_sim_results.png}
+        \caption{Calibrated Simulation Results}
+        \label{fig:sfig3}
+    \end{subfigure} \hfill
+    \begin{subfigure}{.48\textwidth}
+        \centering
+        \includegraphics[width=.8\linewidth]{figs/sims/output_04_01/calibration_behav_True_sim_results.png}
+        \caption{Calibrated Simulation Results}
+        \label{fig:sfig4}
+    \end{subfigure}
+    \label{fig:sim_results}
+\end{figure}
+
+\FloatBarrier
+\begin{figure}[ht]
+    \centering
+    \caption{Simulated UER and Vacancy rates compared to real data.}
+    \includegraphics[scale = 0.6]{figs/sims/output_04_01/monthly_unemployment_and_vacancy_rates.png}
+    \label{fig:uer_vac_rate}
+\end{figure}
+
+\FloatBarrier
+
+Our behavioural parameters $\beta_{w}$,  $\phi_{w}$,  and $\lambda$ are drawn either directly or from processed time series using the methodology outlined in \cite{mukoyamaJobSearchBehavior2018, eeckhoutUnemploymentCycles2019, muellerJobSeekersPerceptions2021}, respectively.  We are still exploring a possible data source for our risk aversion parameter $r$.
+
+\subsection{Data}
+
+The data sources used in this work are briefly documented here. Table \ref{tab:data_input} outlines the data, level of observation (occupation, national), source, and any relevant methodology used to process the raw data from the source. The parameter data are described as "empirical estimates" because they are derived using the proposed methodology of the respective cited papers. 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|p{4cm}|p{2cm}|p{5cm}|p{5cm}|} \hline 
+ \emph{\textbf{Variable}}& \emph{\textbf{Granularity}}& \emph{\textbf{Source}}&\emph{\textbf{Methodology}}\\
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Input data}} \\
+        \hline
+        Gender share of employment &Occupation& Current Population Survey (CPS), Bureau of Labor Statistics (BLS)& \\ \hline 
+        Wages &Occupation& \cite{floodIntegratedPublicUse2020} & \cite{delrio-chanonaOccupationalMobilityAutomation2021}\\ \hline 
+         Employment levels&Occupation& \cite{floodIntegratedPublicUse2020} & \cite{delrio-chanonaOccupationalMobilityAutomation2021}\\ \hline 
+ Unemployment levels& Occupation& \cite{floodIntegratedPublicUse2020} & \cite{delrio-chanonaOccupationalMobilityAutomation2021}\\ \hline 
+ Vacancy levels& Occupation& \cite{floodIntegratedPublicUse2020} & \cite{delrio-chanonaOccupationalMobilityAutomation2021}\\ \hline 
+ Occupational mobility network& Occupation& \cite{floodIntegratedPublicUse2020} & \cite{delrio-chanonaOccupationalMobilityAutomation2021}\\
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Calibration data}} \\
+        \hline
+        Unemployment rate&National& BLS& \\ \hline 
+        Vacancy rate&National& Job Openings \& Labor Turnover Survey (JOLTS), BLS& \\
+ \hline
+        \multicolumn{4}{|l|}{\textbf{Parameter data}} \\
+        \hline
+        Time spent searching by unemployed job-seekers& Empirical estimate&  Current Population Survey (CPS), US Census Bureau \& American Time Use Survey (ATUS), BLS&\cite{mukoyamaJobSearchBehavior2018}\\ \hline 
+        Composition of job-seekers by employment status& Empirical estimate& CPS \& JOLTS&\cite{eeckhoutUnemploymentCycles2019}\\ \hline 
+        Discouragement& Empirical estimate&  Survey of Consumer Expectations (SCE), New York Federal Reserve& \cite{muellerJobSeekersPerceptions2021}\\
+        \hline
+        \hline
+        \multicolumn{4}{|l|}{\textbf{Validation Data}}  \\
+        \hline
+ Long-term unemployment rate& National& CPS via Bureau of Labor Statistics and the Federal Reserve Bank of St. Louis&\\ \hline
+    \end{tabular}
+    \caption{Input data, empirical parameter values, and calibration and validation data benchmarks.}
+    \label{tab:data_input}
+\end{table}
+
+\subsubsection{Validation \& Results (In progress...)}
+
+In order to construct a credible agent-based model, the necessary companion of calibration is validation. Validation refer to the assessment of how well the predictions of an agent-based model maps onto empirically observed patterns. At this stage, the researcher aims to validate the model's output against real-world facts, whether stylized, empirically observed, or represented by data. The sections and plots that follow are indicative either of preliminary attempts to validate the performance of our model along various axes of interest or descriptions of data we wish to (though have not yet) incorporate(d) to further robustify our model.
+
+\textbf{Validating Against the Beveridge Curve}
+
+The Beveridge curve is a negative empirical relationship between the US vacancy rate and unemployment rate \cite{beveridgeFullEmploymentFree2014}. Though our model traces the magnitude of both the vacancy and unemployment rate between 2000-2019 well, our inability to adequately match the shape of the vacancy rate leads to an imperfect replication of the Beveridge curve itself. We display the simulated Beveridge curve alongside the real-world values below for reference. We believe further effort to better model the vacancy rate of the US economy, potentially using data on business confidence, will allow us to better match this relationship.
+
+\begin{figure}[ht]
+    \centering
+    \caption{Simulated Beveridge curve in behavioural versus non-behavioural model.}
+    \includegraphics[scale = 0.45]{figs/sims/output_04_01/beveridge_curve_comparison.png}
+    \label{fig:beveridge_curve}
+\end{figure}
+
+\textbf{Validating Against Labour Market Inefficiencies}
+
+A potential benefit of incorporating behavioural heterogeneity into an agent-based labour market model draws from the proven contribution of such heterogeneity to unequal labour market outcomes. Thus, we evaluate the performance of our model by its ability to reproduce three patterns: 
+
+First, the \textbf{gender wage gap} is a reality of nearly all world economies.  Although several factors contribute to its existence including workplace and recruitment discrimination, entrenched gender roles in relation to caring responsibilities, and occupational choice (which is similarly partly determined by social norms), gendered patterns in job search behaviour have also been found to contribute to gender wage gaps in several countries \cite{caliendoGenderWageGap2017, cortesGenderDifferencesJob2023, fluchtmannGenderApplicationGap2021, lebarbanchonGenderDifferencesJob2021, mcgeeGenderDifferencesReservation2023, erikssonLaborMarketConsequences2012}. Thus, we make a preliminary attempt at incorporating gendered search behaviour into this model by varying the risk aversion between male and female workers in the model. Practically, this means that male workers will aim higher by applying to jobs that yield a higher relative utility gain than those applied to by women. The resulting wage gap from this implementation is displayed below. This work is still in a preliminary stage but we believe that incorporating insights from behavioural labour economics into how job search patterns differ between men and women can allow for an evaluation of relative wage gains in the eventual application of this model to a policy analysis scenario.
+
+\begin{figure}
+    \caption{Simulated gender wage gap in behavioural versus non-behavioural model.}
+         \centering
+         \includegraphics[scale = 0.35]{figs/sims/output_04_01/gender_wage_gaps.jpg}
+        \label{fig:gender_gap}
+\end{figure}
+
+\FloatBarrier
+
+Second, \textbf{long-term unemployment}, defined as the state of being unemployed for a period of at least 12 months, is a persistent challenge across economies \href{https://www.oecd.org/en/data/indicators/long-term-unemployment-rate.html#:~:text=Long%2Dterm%20unemployment%20refers%20to,for%2012%20months%20or%20more.}{(Source: OECD)}. Long-term unemployment is of considerable concern as it can both indicate economic ill health, while also potentially causing poor economic, mental, or even physical health consequences for those individuals or communities experiencing it \href{abrahamConsequencesLongTermUnemployment2016}. However, long-term unemployment persists even during periods of macro-economic health. In other words, despite the existence of suitable open vacancies, a significant proportion of a labour market might still remain in unemployment. Our mechanism for worker discouragement $\lambda$ informed by insights from \cite{muellerJobSeekersPerceptions2021} directly influences the long-term unemployment rate in our behavioural model. Therefore, we can compare the performance of our two models against the observed long-term unemployment rate data available from the Current Population Survey for the period 2000-2019, demonstrated in Figure \ref{fig:ltuer_sims}. Our calibration of the parameter relevant to the discouragement mechanism in our model remains under-calibrated. We aim to dedicate significant attention to ensure the accuracy and relevance of this mechanism and will use the below data to assess our model's informativeness. 
+
+\begin{figure}[ht]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/sims/output_04_01/long_term_unemployment_rate.png}
+        \caption{Simulated long-term unemployment in behavioural versus non-behavioural model.}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/sims/output_04_01/ltuer_distributions.jpg}
+        \caption{End-of-simulation (2019Q2) distribution of unemployment duration for unemployed agents.}
+    \end{subfigure}
+    \label{fig:ltuer_sims}
+\end{figure}
+
+\FloatBarrier
+
+
+\section{Discussion \& Forthcoming Work}
+The results presented above will certainly benefit from further dedicated work. However, we believe the above provides a solid basis for exploring a few important key mechanisms to strengthen the model: 
+\begin{itemize}
+    \item First, one of the most immediate model mechanisms that we wish to incorporate is \textbf{on-the-job search}. As noted above, our model incorporates a parameter $\phi_{w}$ which represents the propensity with which employed workers resort to job-seeking. \cite{eeckhoutUnemploymentCycles2019} provide compelling evidence that the pro-cyclical nature of the magnitude of on-the-job seekers present in the labour market can endogenously create cyclical outcomes. Therefore, we strongly believe that our picture of the labour market is incomplete without consideration of the varying degree of competition between unemployed and employed job-seekers. We have replicated and extended the data used in \cite{eeckhoutUnemploymentCycles2019} to measure the presence of on-the-job seekers in the economy and aim to implement this functionality imminently.  \\
+    \item Second, we are interested in \textbf{exploring the quality of matches} generated in our model. We believe for example, that assessing the accepted wage offers of workers could provide insight into the potential wage gains or losses across occupational or demographic characteristics during particular periods in history.  Focusing in particular on wage losses could inform relevant discourse on the role of displacement on earnings \cite{fallickJobDisplacementEarnings2025}.
+    \item Third, we aim to incorporate an \textbf{endogenous wage change mechanism}. Currently, mean occupational wages are fixed. We believe that careful thought can inform a wage mechanism responsive to changes in labour supply and demand. Not only would such an incorporation bring greater realism to the model but could similarly inform discourse on wage dispersion and displacement-related wage losses (as discussed above).
+    \item Fourth, target demand responds uniformly to fluctuations in GDP. We believe that this assumption of uniformity is highly unrealistic. Rather, we are interested in incorporating occupation-specific target demand such that occupational risks can be assessed using this model. The US Bureau of Labour Statistics provides ten-year-ahead occupational employment projections we could use to test the performance of our model over time \emph{\href{https://www.bls.gov/emp/tables.htm}{Source}}. Figure \ref{fig:bls_pastprojs_} shows the forecast by occupation including a shaded area that shows the years for which we have a real-world observation (ie. forecasts that have materialised). Figures \ref{fig:bls_proj_high_level}-\ref{fig:bls_projs} show the occupational detail per forecast/projection by ranking the projected percent change in employment in each occupation. We believe that such data could be useful for bringing greater granularity to our model results when applied to assess the central research question regarding the potential heterogeneous impacts of economic or structural transformation.
+ 
+\begin{figure}[ht]
+    \centering
+    \caption{Past BLS 2018-2022 (+10-year) Employment Projections}
+    \includegraphics[scale = 0.13]{figs/bls_real_forecast_values.jpg}
+    \label{fig:bls_pastprojs_}
+\end{figure}
+
+\FloatBarrier
+\end{itemize}
+
+
+\printbibliography
+
+\end{document}
+

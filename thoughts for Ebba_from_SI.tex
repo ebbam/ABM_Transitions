@@ -1,0 +1,140 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+%\usepackage{xcolor}
+
+
+\begin{document}
+
+
+\section*{A Model of Application Decisions with Risk Aversion 2}
+
+We consider two populations of job seekers:
+\[
+  \mathcal{E} = \{\text{employed agents}\}, 
+  \quad
+  \mathcal{U} = \{\text{unemployed agents}\}.
+\]
+
+There are \(V\) vacancies and \(U\) unemployed, define labour?market tightness as
+\[
+  \varphi \;=\;\frac{V}{U}.
+\]
+
+\subsection*{1. Utility Functions}
+Each agent \(i\) has a von Neumann Morgenstern utility over wages \(w\):
+\[
+  u_i(w) \;=\;
+    \begin{cases}
+      \dfrac{w^{1-\gamma_i}}{1-\gamma_i}, & \gamma_i \neq 1,\\[1em]
+      \ln w, & \gamma_i = 1,
+    \end{cases}
+\]
+where
+\(\gamma_i>0\)  i.e.  risk averse (concave),  
+\(\gamma_i<0\) i..e  risk seeking (convex),  
+\(\gamma_i=0\) i.e risk neutral (\(u_i(w)=w\)).
+
+\subsection*{2. Reservation Wage and Utility}
+Each agent \(i\) faces a \emph{reservation wage} \(R_{i,t}\).  We posit
+\begin{align}
+  R_{E}(\varphi) 
+    &= w_i \;\bigl[\,1 + \alpha_E\,(1 - \varphi)\bigr],
+    \quad
+    i \in \mathcal E,
+    \label{eq:R_E}\\
+  R_{U,t}(\varphi, D_{U,t})
+    &= \underbrace{\,\overline w}_{\text{base level}}
+      \;\bigl[\,1 - \alpha_U\,(1 - \varphi)\bigr]
+      + \delta_U\,D_{U,t},
+    \quad
+    i \in \mathcal U.
+    \label{eq:R_U}
+\end{align}
+- In a recession (\(\varphi\!\downarrow\)), \(R_{E}\) \emph{rises} (employed hold on),
+  while \(R_{U}\) \emph{falls} (unemployed apply even to low wages).
+- \(D_{U,t}\) is an \emph{unemployment discouragement index} (see below), and
+  \(\delta_U>0\) captures how failure to find work raises the unemployed's  bar.
+Their \emph{reservation utility} is then \(u_i\bigl(R_{i,t}\bigr)\).
+
+
+
+
+\subsection*{3. Expected Utility of Applying}
+Suppose any vacancy \(j\) yields a match with probability 
+\(p(\varphi)\) (decreasing in tightness).  If matched, agent \(i\)
+earns \(w_j\); if not, they remain at their outside option wage:
+\[
+  w_i^{\mathrm{out}} = 
+    \begin{cases}
+      w_i, & i\in\mathcal E,\\
+      b,   & i\in\mathcal U\quad(\text{e.g.\ unemployment benefit }b<\overline w).
+    \end{cases}
+\]
+Hence the \emph{expected utility} of applying to \(j\) is
+\[
+  \mathrm{EU}_{i,j}
+    = p(\varphi)\,u_i(w_j)
+    \;+\;\bigl[1 - p(\varphi)\bigr]\,u_i\bigl(w_i^{\mathrm{out}}\bigr).
+\]
+
+\subsection*{4. Application Rule with Risk}
+Agent \(i\) now applies to every vacancy \(j\) for which
+\[
+  \mathrm{EU}_{i,j}
+  \;\ge\; u_i\bigl(R_{i,t}\bigr),
+\]
+i.e.\ the expected gain in utility exceeds the utility of staying at the reservation wage.
+
+Thus the number of applications is
+\[
+  A_{i,t}
+    = \#\bigl\{\,j:\;p(\varphi)\,u_i(w_j)
+      + [1 - p(\varphi)]\,u_i(w_i^{\mathrm{out}})
+      \;\ge\; u_i(R_{i,t})\bigr\}.
+\]
+
+\subsection*{5. Discouragement Dynamics}
+Define success in period \(t\) by
+\[
+  s_{i,t} = 
+  \begin{cases}
+    1, & \text{if $i$ obtains a job offer at $t$,}\\
+    0, & \text{otherwise.}
+  \end{cases}
+\]
+Discouragement \(D_{i,t}\)  evolves:
+\[
+  D_{i,t+1} \;=\; \rho_i\,D_{i,t} \;+\; (1-s_{i,t}), 
+  \quad 0<\rho_i<1,
+\]
+with \(\rho_U<\rho_E\).
+
+\color{red}
+
+\subsection*{5. Effort Scaled Application Rule}
+Define two effort factors:
+\[
+  e_{E,t}
+  = \max\bigl\{0,\;\varphi\,\bigl(1 - \kappa_E\,D_{E,t}\bigr)\bigr\},
+  \qquad
+  e_{U,t}
+  = \max\bigl\{0,\;1 - \kappa_U\,D_{U,t}\bigr\},
+\]
+with \(\kappa_U>\kappa_E\).  Note that  $\kappa_i\ $: sensitivity of application effort to discouragement. Therefore
+- Employed: if \(D_{E,t}=0\), effort \(=\varphi\) (more tightness = more search).  
+- Unemployed: effort only falls with discouragement.
+
+Let  
+\(\displaystyle \mathcal A_{i,t}^* = \{\,j: \mathrm{EU}_{i,j}\ge u_i(R_{i})\}\)  
+be the set of ?worthwhile? vacancies.  Then the actual number of applications is
+\[
+  A_{i,t}
+  = e_{i,t}\,\bigl|\mathcal A_{i,t}^*\bigr|
+  \;=\;
+  e_{i,t}\;\#\Bigl\{\,j:\;p(\varphi)\,u_i(w_j)
+    +[1-p(\varphi)]\,u_i(w_i^{\mathrm{out}})
+    \ge u_i(R_i)\Bigr\}.
+\]
+\color{red}
+
+\end{document}

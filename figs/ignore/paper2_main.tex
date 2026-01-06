@@ -1,0 +1,266 @@
+\documentclass[hidelinks]{article}
+\input{packages.tex}
+
+\title{Who, what, where gets left behind? \\
+Incorporating preferences and behavioural attributes into an agent-based labour market model}
+\author{Ebba Mark}
+\date{}
+\begin{document}
+\begin{refsection}
+%\chapter[Who, what, where gets left behind? Incorporating behavioural heterogeneity into an agent-based labour market model]{Who, what, where gets left behind? \\
+%Incorporating behavioural heterogeneity into an agent-based labour market model}
+%\counterwithin{figure}{chapter}
+
+\input{format.tikz}
+\maketitle
+
+
+\begin{abstract}
+% \chapterabstract{
+% \\
+Labour market frictions resulting from decarbonisation or net-zero industrial transformation are likely to be spatially, occupationally, and demographically heterogeneous raising the potential for groups of people to become ``left behind''. Agent-based modelling has emerged as a useful tool for understanding the dynamics of labour market adjustment to macro-level shocks, including reductions in demand for fossil fuel workers. The search efforts and processes of unemployed or laid-off workers do not happen in a vacuum but are centrally influenced by behavioural attributes like impatience and their attitudes toward risk as well as their wage, skills, and location preferences. However, these critical decision-making foundations have thus far been neglected in agent-based labour market models. Thus, this work aims to contribute to the potential of these tools to aid policymaking by presenting the first \emph{behavioural} agent-based labour market model. More specifically, this model will incorporate critical behavioural micro foundations (wage and location preferences, risk aversion, and impatience) into a leading data-driven network model of worker transitions. This methodological contribution will allow for greater simulation fidelity in future analyses of the heterogeneous societal and economic effects of a net-zero transition (and other structural transformation) on people and places.
+%}
+\end{abstract}
+
+\setlength{\parskip}{12pt}
+
+\section{Background}
+
+\textbf{Transitioning from an emissions-intensive economy to a net-zero one will be accompanied by spatially, occupationally, and demographically heterogeneous labour market frictions.} Although considerable evidence exists that workers have the capacity to adapt to labour market shocks on aggregate, most recently explored empirically in the context of the Covid-19 pandemic, uneven frictions across occupations, wage, skills, gender, geography likely result in residual challenges for specific groups of people if unmanaged \parencite{hensvikJobSearchCOVID192021,carrillo-tudelaSearchReallocationCovid192022}. Such frictions not only have consequences for people’s lives and livelihoods but could contribute to public opposition to stringent climate policy when it is most urgently needed. Therefore, ensuring the cost efficiency of policy implemented to alleviate these adverse labour market consequences of a net-zero transition on people and communities requires knowledge of where and for whom these frictions will be most disruptive. 
+
+\textbf{Agent-based models (ABMs) have emerged as a useful tool for modelling labour market dynamics and macro-economic adjustment processes \parencite{cincottiWhyWeNeed2022, dawidAgentBasedMacroeconomics2018, leijonhufvudChapter36AgentBased2006, neugartAgentbasedModelsLabor2012}}.\footnote{Examples of applications include studies on the effect of structural reform policy on unemployment and income inequalities \parencite{dosiEffectsLabourMarket2018}; the relationship between employment protection legislation and unemployment with an endogenized institutional setting in which workers can vote to influence the employment protection legislation \parencite{martinShocksEndogenousInstitutions2009}; and an investigation of the effect of social networks on job market and upskilling effort \parencite{gemkowReferralHiringEndogenous2011}.}  Critically, ABMs allow modellers to observe endogenous shocks, agent heterogeneity, non-market interactions, and out-of-equilibirum dynamics, features that classic economic modelling struggles to offer \parencite{cincottiWhyWeNeed2022}. More broadly, agent-based modelling provides a useful venue through which to integrate insights from multiple disciplines \cite{savinAgentbasedModelingIntegrate2023}. Indeed, agent-based modelling might provide one of the more straight-forward ways in which to do so as it requires incorporating insights from macro, meso, and micro level disciplines. Thus, these models are exceptionally well-suited to analyse the inherently cross-discipline, cross-policy, and otherwise \emph{cross-cutting} nature of socio-economic, political, and ecological transformation.
+
+Responding to an ardent interest in modelling processes of structural labour market transformation caused by phenomena such as automation, digitalisation, and, not least, the green transition, a data-driven network model constructed by del Rio-Chanona et al. \cite{delrio-chanonaOccupationalMobilityAutomation2021} constituted a significant methodological breakthrough in the field of computational social science. \footnote{The model's original application examined the potential impact of automation on the US labour market by simulating the job searches of laid-off or otherwise unemployed workers following a contraction in demand in particular occupations at high risk of automation. Since this original project, various methodological modifications including the incorporation of the role of geography and a coupling to input-output data have been made in further applications to labour markets in the US and Brazil \parencite{buckerEmploymentDynamicsRapid, berrymanModellingLabourMarket}.} \textbf{However, despite their central role in job search processes, preferences and behavioural attributes of workers have yet to be incorporated into the model’s core functionality.} Crucially, both worker preferences \cite{nayaDesigningLaborMarket2021} for wage, location \cite{limLocationMajorBarrier2023}, and skill similarity \cite{schoenbergHowGeneralSpecific2006, goosMarketsJobsTheir2019, dawsonSkilldrivenRecommendationsJob2021, neffkeSkillMismatchCosts2022, soaresmartinsnetoForcedDisplacementOccupational2023} as well as behavioural attributes such as risk aversion and impatience \cite{simoesIndividualDeterminantsSelfEmployment2016} have proven to define the processes and outcomes of job searches and worker transitions. Despite the fact that two of the most broadly cited benefits of ABMs are that they allow modellers to move away from the rational expectations approach as a prime input to modeling agent behavior \parencite{neugartAgentbasedModelsLabor2012, heppenstallFutureDevelopmentsGeographical2021}, remarkably, as a class, agent-based models of the labour market have broadly neglected the inclusion of the aforementioned behavioural micro foundations into their core functioning \parencite{neugartAgentbasedModelsLabor2012}.
+
+\textbf{Therefore, this work aims to propose a method of incorporating behavioural heterogeneity, through preferences and varied search behaviour, into del Rio-Chanona et al's agent-based labour market model to ensure greater simulation fidelity in future applications to policy analysis.} Additionally, with this methodological adjustment in place, this work aims to make a policy-relevant contribution through the use of real labour market data to better detect the emergence of isolated or left behind (geographic, demographic, occupational) groups in a changing world of work. Ultimately, the objective is to allow for a better assessment of the heterogeneous effects that the net-zero transition is likely to exert on people and places. In summary, this project aims to answer the following research questions:
+
+\hangindent 2.5em \emph{RQ3: What is the value of incorporating behavioural heterogeneity in agent-based models?} 
+
+\hangindent 2.5em \emph{RQ4: Incorporating such behavioural heterogeneity, which groups of people (demographic, geographical, occupational) might experience isolation from the labour market as a result of a net-zero structural transformation?}
+
+
+In the sections that follow, I outline (Section 2.1.1) the theory behind our inclusion of the four mentioned micro foundations; (Section 2.2) outline of scoped data; (Section 2.3) our proposed methods; (Section 2.4) a progress report including (Section 2.4.1) results from a toy model as proof-of-concept, (Section 2.4.2) tasks remaining to be implemented or pursued, (Section 2.4.3) and conferences or journals that I intend to submit the products of this work to when ready. 
+
+\subsection{Identifying critical micro foundations}
+\textbf{Job search processes do not occur in a vacuum but are subject to conditions of space, time and bias.} Below, I outline the micro foundations selected for examination in this study categorised either as (1) preferences or (2) behavioural attributes.
+
+\subsubsection{Preferences}
+\textbf{Fundamentally, job search-and-matching processes are dictated by worker preferences for vacancies and employer preferences for workers \parencite{wanbergJobSeekingProcess2020}.} This research will focus on the worker side of the equation by incorporating three key worker preferences, two of which are novel in the context of this model:  skills (existing basis for del Rio-Chanona et al.'s work), wage, and location. 
+
+\underline{Skills}
+
+\textbf{First and foremost, job seekers take skills similarity or fitness into account when searching and applying for new jobs \cite{soaresmartinsnetoForcedDisplacementOccupational2023, neffkeSkillMismatchCosts2022, schoenbergHowGeneralSpecific2006}.} Additionally, job recommenders (or other institutions that aim to ease job matching) take skills and educational attainment compatibility into account as a central criteria for job recommendations \parencite{dawsonSkilldrivenRecommendationsJob2021, nayaDesigningLaborMarket2021, rusClosingGenderWage2022, biedFairnessJobRecommendations2023, biedJobRecommendationAll2023}. This model, in line with the original construction by del Rio-Chanona et al., will be built on a central occupational mobility network. Due to its construction on observed occupational transitions, the network itself justifiably embodies skill similarities between occupations.\footnote{Occupational transition probabilities are an imperfect proxy for skills preferences. Therefore, I have a strong interest in incorporating skills data to better represent the role of skills preferences in job searches. This extension will depend on data availability.}
+
+%The French labour market provides a prime example of this effect in which the national public employment service P\^{o}le emploi has rolled out the new Operational Directory of Occupations and Jobs (Rome) designed to provide a central occupational similarity crosswalk as a fundamental input to job recommendations made by the agency 
+
+\underline{Wage}
+
+\textbf{It is a well-established fact that job seekers strive for higher wages in job search processes.} Although individuals accept different trade-offs between wage premiums and quality or content of work; in general, workers prefer equal- or higher-paying opportunities when transitioning into a new job. In the model proposed here, wages are incorporated as attributes of vacancies and workers.
+
+\underline{Location}
+
+\textbf{Distance between a job-seeker and open vacancies or opportunities have a strong influence on whether they apply to a given opportunity or accept a job offer.} First, individuals are generally averse to longer commuting times \parencite{erikssonLaborMarketConsequences2012}. If a job transition requires a more permanent relocation, job seekers must weigh the value of their family and community ties, relative quality of life, and the cost and inconvenience that accompany a physical move. In the context of a decarbonisation transition, aversion to relocation or longer commutes is likely to play a particularly important role as research shows that fossil fuel workers are not always co-located with hubs offering plentiful employment opportunities \cite{hendricksonCounteringGeographyDiscontent2018, limLocationMajorBarrier2023, erikssonLaborMarketConsequences2012, lebarbanchonGenderDifferencesJob2021}.\footnote{In surveying the literature, I have found that the incorporation of geography or relevant spatial frictions into the model construction, calibration, and, when relevant, agent decision-making is often an \emph{extension} rather than an integral consideration when building an agent-based labour market model. This not only signals a potential research gap but also that incorporating geography is a non-trivial task. Therefore, I am keen to study different methods to ensure that the incorporation of geography into this model is sound and well-founded. I believe the argument for incorporating geographical considerations as fundamental to this work is strong because evidence from other disciplines demonstrates clearly that the distribution of both ills and goods within society are pre-determined by geography and spatial relations. Furthermore, policymakers and communities advocate consistently for tailored or place-based policy interventions across nearly all categories of policy \cite{suedekumPlaceBasedPoliciesHow2021, syssnerPlacebasedPolicyObjectives2023}} Preferences for location have yet to be programmatically incorporated into our model structure. 
+
+% Furthermore, recent data from the US shows geographic mobility is declining with the amount of individuals moving across state lines having decreased by 50\% between 1990-2018 \parencite{rickardEconomicGeographyPolitics2020, hendricksonCounteringGeographyDiscontent2018}. \textcolor{red}{Important to corroborate this finding in other regions, most importantly, Europe and France}.
+
+
+
+\subsubsection{Behaviour}
+
+\textbf{Behavioural labour economics provides an important bridge between insights from traditional labour economics research that studies aggregate labour market outcomes (only occasionally informed by agent preferences), with rules, heuristics, and insights regarding the individual behaviour that makes up these aggregate outcomes \parencite{dohmenBehavioralLaborEconomics2014}.} Although the field has put forth several behavioural attributes and biases that influence job search processes and labour market decisions, I outline those selected for the purpose of our study below: risk aversion and impatience\footnote{The two behavioural characteristics incorporated into this model in no way constitute an exhaustive list of the behavioural attributes that define job search processes and outcomes. Rather, they represent just a small subset of the various traits that have been presented by behavioural labour economists, including \emph{locus of control} defined as an individual's perception of control over their life is hypothesized to heavily influence the job search process, an activity that is inherently self-driven and aspirational \parencite{caliendoLocusControlJob2015, schnitzleinLocusControlLowwage2016}; \emph{perceived returns to job search effort} \parencite{adams-prasslPerceivedReturnsJob2023}; \emph{perception of ability} defined as an individual's (mis)perception of ability or fitness for the labour market or open vacancies dictating expectations, effort, and reservations in the job search process \parencite{adams-prasslPerceivedReturnsJob2023, cortesGenderDifferencesJob2023, muellerJobSeekersPerceptions2021, spinnewijnUnemployedOptimisticOptimal2015, cortesGenderDifferencesJob2023}; \emph{social interactions and network effects}; other iterations of \emph{imperfect or bounded rationality}; \emph{openness to experience} \parencite{alderottiBigFivePersonality2023}.}. The incorporation of these two behavioural mechanisms underlies the most novel contribution of this study. Typically, labour economics research on job search has utilised matching functions that match workers to open vacancies, calibrated on aggregate employment statistics \parencite{mortensenMatchingProcessNoncooperative1982, pissaridesShortRunEquilibriumDynamics1985}. However, such functions assume that labour markets clear, or at least sufficiently clear, to an equilibrium unemployment rate and rarely consider heterogeneity of job seekers, the conditions defining their work requirements, or the psychological attributes or behaviours that define their evaluation of available job opportunities. Evidence of the lack of full validity of matching functions can be found in the ``inefficient'' outcomes of real-world labour markets such as gender wage gaps, long-term unemployment, and discouraged workers. Understanding the emergence of these empirical truths requires a better grasp of the underlying human behaviour that dictates job search processes. 
+
+
+% \color{red} Ebba, cite here all the work of Marco Caliendo, on the role of risk aversion on job searches (locus of control too). In fact, there appear to be an empirical link between internal locus of control and time preferences and risk aversion. Here the argument should outline that some of these psychological factors affect the extent to which individuals explore and seize job opportunities. Basically, what I am suggesting is that here in this para the behavioural argument should be strong and convincing. The details can go into the next sub-para. There is also one thing also to think about -- there is one of the BIG 5 personality trait, openness to experience that might be relevant and related to what I am trying to do \parencite{alderottiBigFivePersonality2023}. This dimension is likely to influence performance trajectories through its effects on individuals' intrinsic motivation to learn. Although open individuals are not necessarily more capable than their less open counterparts, they are more likely to perform behaviours and display mind-sets that facilitate long-term knowledge and skill acquisition. Furthermore, highly open individuals are more likely to adopt a learning goal orientation, which, in turn, is associated with a highly adaptive pattern of responding that includes setting challenging goals, the use of more effective learning strategies, higher levels of effort and planning, and greater feedback seeking behaviour. I am not suggesting that I should consider this trait (it is in fact hard to measure). However, I need to consider the insights I can get from this literature ( see for example \url{ https://doi.org/10.1111/j.1464-0597.2012.00490.x} Once you have a write up I can help with the framing. \color{black}. 
+
+\underline{Risk aversion}
+
+\textbf{Risk aversion has been found to influence job-seekers in different ways.} For example, job-seekers might exhibit an aversion to rejection, long spells of unemployment, or relocation and therefore adjust their search strategies and criteria accordingly. It has been found that risk aversion tends to lower an individual's reservation wage, prompt them to search earlier, or accept a job earlier in the search process \parencite{boninCrosssectionalEarningsRisk2007, cortesGenderDifferencesJob2023}. Furthermore, risk aversion has similarly been determined to have strong associations with demographic and socioeconomic characteristics like gender, income, and cognitive ability \parencite{cortesGenderDifferencesJob2023, heckmanEffectsCognitiveNoncognitive2006, erikssonLaborMarketConsequences2012}. In fact, due to these associations, risk aversion is often credited with instilling the prominent pay and benefit gaps between genders and income groups observable in all labour markets in the world \parencite{cortesGenderDifferencesJob2023}. In our study, risk aversion will be modelled to affect how much of a utility differential a worker aims for when evaluating available vacancies. For example, a risk averse person would likely apply to a job that is similar in skills requirements, wage, and location to their last held job whereas a less risk averse person might aim for likely less attainable job prospects but with a perceived higher utility gain.
+
+\underline{Impatience}
+
+Workers work for a variety of different reasons, the most central of which is to earn a salary to afford a secure everyday life. \textbf{Although, as outlined above, workers are often motivated by more than just salary, financial constraints in the event of an unemployment spell is a real threat to individual health and happiness \cite{rantakeisuFinancialHardshipShame1999}. Therefore, unemployed individuals often feel pressure to secure work.} Thus, I incorporate an element of pressure into the job search process which I define here as ``impatience.'' \footnote{My use of the term ``impatience'' here does not align with the behaviouralist's definition of ``impatience'' \parencite{dellavignaJobSearchImpatience2005}. In this study, impatience refers rather to restlessness or pressure. The terminology remains to be reconciled in this work. Nonetheless, it is well established that workers search for jobs with different senses of urgency as a result of the financial or liquidity constraints they face during unemployment.} In this work, I incorporate the effect of impatience as a factor that influences how much search effort an individual expends.  Practically, as pressure to secure employment grows with time spent unemployed, workers in our model expend a greater search effort by applying to more vacancies.\footnote{In our model, a worker's reaction to this pressure is non-linear: workers increase their effort up to a certain point at which they begin to become ``discouraged'' and gradually reign in their search effort. For the purpose of this study, I do not allow workers to exit the labour force by stopping searching completely.}
+
+\section{Data}
+To build our occupational mobility network, I have identified two key data sources collected by the French National Institute of Statistics and Economic Studies which provide a rich source of data suitable for the above study design. First, the Base tous salariés (BTS-Postes) provides data on job transitions for all registered workers in the French labour market with accompanying location, gender, wage, and other relevant information. Second, a panel version of this data is available for 1/12th of registered French employees. These data sources cannot be combined for data privacy reasons. Therefore, a decision will need to be made about the relative value of sample size versus access to employment histories for a smaller sub-sample. The extended model proposed in this work will build an occupational mobility network using French labour market data, as in del Rio-Chanona et al.
+
+%GNN method: 
+
+%\textcolor{red}{look at method used in \parencite{boninCrosssectionalEarningsRisk2007} to %tease out the role of risk aversion in wage sorting via unexplained variation}
+
+\section{Methods}
+\subsection{Approach}
+The below section outlines how the above theory will be implemented into del Rio-Chanona et al's agent-based labour market model. The original execution of the model is outlined in Figure \ref{fig:omn_original}.
+
+% \begin{figure}[H]
+% \begin{center}
+%     \caption{Occupational Mobility Network Flow Chart}
+%     \includegraphics[scale = 0.1]{paper2/rsif_model_order.jpeg}
+%     \label{fig:omn_original}
+% \end{center}
+% \end{figure}
+
+\subsubsection{Modelling the job search process}
+The stage in this chain that I am aiming to add information to is the application stage (circled in gray). I aim to expand on the ``search'' element of the process that will be influenced by worker preferences (location, skill similarity, wage) and behavioural attributes (risk aversion, impatience) outlined above. Figure \ref{fig:search_unemp} represents the decision-making process of an unemployed worker when searching for a job in the adjusted model proposed.
+
+A worker enters a time step unemployed with a level of impatience/pressure and memory of the wage, skills content, and location of their latest held job. First, the worker will "find" a set of \emph{n} vacancies which constitute a subset of the available vacancies in the economy within occupations that have a non-zero transition probability from the worker's latest held job. I do not assume that the worker is perfectly informed of all available vacancies and assume that they can only ``find'' \emph{n} vacancies, representing a reasonable search effort. The worker then ranks these vacancies according to a utility function that weighs the wage, location, and skills differential between the vacancy and the latest held job (in the case of location, their current residence). 
+
+At this point, the psychological attributes enter the stylized process. First, if there are available vacancies that satisfy a certain threshold value of utility, the worker will then determine their search effort (ie. the number \emph{v} of vacancies to apply to), depending on their level of impatience. Next, the worker's level of risk aversion will determine which range of the ranked \emph{n} they will apply to (ie. the $\frac{v}{n}$-tile of the ranked \emph{n} vacancies). Finally, the worker ends the time step having either applied or not applied to a set of vacancies and increases their level of impatience as a result of having spent another time step unemployed.
+
+\begin{figure}[H]
+    \caption{Search Process}
+    \begin{tikzpicture}[node distance=2cm]
+    \node (start) [startstop] {Begin time step unemployed};
+    \node (pro1a) [process, below of=start] {Find \emph{n} vacancies};
+    \node (pro1) [process, below of=pro1a] {Rank \emph{n} vacancies};
+    \node (in1) [io, left of=pro1, xshift = -3 cm] {$u_{v} = \alpha \Delta wage - \beta \Delta location + \gamma \Delta skills...$};
+    \node (dec1) [decision, below of=pro1, yshift=-1cm] {Acceptable open vacancies?};
+    \node (pro2) [process, right of =dec1, yshift=2cm, xshift = 3 cm] {Increase Search Effort};
+    \node (dec2) [process, below of=dec1, yshift=-1.5cm] {Apply to $v/n$-tile of ranked vacancies};
+    \node (in2) [io, left of=dec2, xshift = -3 cm, yshift = -1 cm] {Aiming high or low: \\ ($\frac{v}{n}$-tile)};
+    \node (in3) [io, left of=dec2, xshift = -2.5 cm, yshift = 1 cm] {Search effort (\emph{v})};
+    \node (pro3) [process, below of =dec2]{Hired?};
+    \node (stopemp) [startstop, below of = pro3, yshift = -1 cm, xshift = -3 cm] {End time step employed};
+    \node (stopunemp) [startstop, below of = pro3, yshift = -1 cm, xshift = 3 cm] {End time step unemployed};
+    
+    \draw [arrow] (start) -- (pro1a);
+    \draw [arrow] (pro1a) -- (pro1);
+    \draw [arrow] (in1) -- (pro1);
+    \draw [arrow] (in2) -- (dec2);
+    \draw [arrow] (pro1) -- (dec1);
+    \draw [arrow] (dec2) -- (pro3);
+    \draw [arrow] (dec1) -- node[anchor=east] {yes} (dec2);
+    \draw [arrow] (stopunemp) -| node[anchor=north] {} ++(4,0) |- (pro2);
+    \draw [arrow] (pro3) -- node[anchor=east] {yes} (stopemp);
+    \draw [arrow] (pro3) -- node[anchor=east] {no} (stopunemp);
+    \draw [arrow] (pro2) |- node[anchor=north] {} (start);
+    \draw [arrow] (in3) -- (dec2);
+    \draw [arrow] (dec1) -| node[anchor=north] {no} ++(4,0)  -| (pro2);
+    %\draw [arrow] (dec2) --  node[anchor=east, above=2pt ] {} ++(7,0) |- (start);
+    \end{tikzpicture}
+    \label{fig:search_unemp}
+\end{figure}
+
+\FloatBarrier
+
+\subsubsection{Modelling a net-zero transformation}
+
+Once this job search process is incorporated into the core functionality of the overall labour market model outlined in Figure \ref{fig:omn_original}, I will impose a green transition shock similar to the process of del Rio-Chanona et al's automation shock. Each occupation will be characterised by a level of layoff risk, represented by a predicted percentage change in labour demand as a result of a net-zero transformation. This change in labour demand will be imposed by a sigmoid function of time that approaches the post-transition level of labour demand within a determined time horizon. The adjustment time and dynamics of the model will then be evaluated.
+
+
+\section{Progress Report}
+
+\subsection{Progress to date}
+\subsubsection{Proof of Concept: Toy Model}
+I have implemented majority of the components outlined above into a toy model which can readily accept data from other sources when collected. This model is built on a fake economy with 1,100 workers with varying levels of risk aversion across five occupations with varying wages and levels of demand for employment. In each of the charts below, the three panels represent model results of (from left to right) a ``Non-behavioural'' model that incorporates the baseline specification as introduced in del Rio-Chanona et al., a model with ``Wage Preferences'' only, and, finally, the (nearly) ``full'' behavioural model that incorporates ``Wage Preferences, Risk Aversion \& Impatience.'' \footnote{Transparent lines depict results from single simulations (50 run in total), and solid lines depict moving averages of the simulation results.}
+
+% \begin{table}[htbp] \centering 
+%     \caption{Toy Model: Initial Occupation Attributes} 
+%     \label{toy_occ_attributes} 
+%     \begin{tabular}{@{\extracolsep{5pt}}cccccc} 
+%     \\[-1.8ex]\hline 
+%     \hline \\[-1.8ex] 
+%     \textbf{Occupation ID} & \textbf{Employed} & \textbf{Unemployed} & \textbf{Vacancies} & \textbf{Wage} \\
+%     \textbf{1} & 100 & 40 & 20 & \$59.000 \\
+%     \textbf{2} & 200 & 20 & 5 & \$52.000 \\
+%     \textbf{3} & 300 & 25 & 90 & \$39.000 \\
+%     \textbf{4} & 100 & 10 & 50 & \$49.000 \\
+%     \textbf{5} & 300 & 5 & 35 & \$45.000 \\
+%     \hline \\[-1.8ex] 
+%     \end{tabular} 
+% \end{table}
+
+% \begin{table}[htbp] \centering 
+%     \caption{Toy Model: Transition Adjacency Matrix} 
+%     \label{toy_adj_matrix} 
+%     \begin{tabular}{@{\extracolsep{5pt}}cccccc} 
+%     \\[-1.8ex]\hline 
+%     \hline \\[-1.8ex] 
+%     \textbf{Occupation ID}  & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} \\ 
+%     \hline \\[-1.8ex] 
+%     \textbf{1} & 0,4	& 0,2 & 0,3	& 0,1 & 0 \\
+%     \textbf{2} & 0,3	& 0,3 & 0,1 & 0	& 0,3 \\
+%     \textbf{3} & 0,2	& 0,1 & 0,4 & 0,3 & 0 \\
+%     \textbf{4} & 0,1	& 0,2 & 0,1 & 0,5 & 0,1 \\
+%     \textbf{5} & 0 & 0,2	& 0,1 & 0,1	& 0,6 \\
+%     \hline \\[-1.8ex] 
+%     \end{tabular} 
+% \end{table}
+
+First, I ``validate'' the performance of the model's steady state against a stylised Beveridge curve and find that the relationship between the vacancy rate and unemployment rate cycles counter-clockwise, as desired (as time progresses, colors in Figure \ref{fig:toy_bev_curve} cycle from purple to yellow). The Beveridge curve of each model is represented in Figure \ref{fig:toy_bev_curve}.
+
+%\footnote{The full behavioural model oscillates at a higher average level of unemployment rate, likely due to the additional frictions incorporated into the underlying search process. The Beveridge curve of the model with only wage preferences oscillates with a much higher vacancy rate implying that there is greater competition for higher-wage vacancies, likely leaving less desirable vacancies unfilled for longer periods of time.}
+
+% \begin{figure}[h!]
+% \begin{center}
+%     \caption{}
+%     \includegraphics[scale = 0.15]{paper2/figs/beveridge_curve_single.jpg}
+%     \label{fig:toy_bev_curve}
+% \end{center}
+% \end{figure}
+
+
+% \begin{figure}[h!]
+% \begin{center}
+%     \caption{}
+%     \includegraphics[scale = 0.15]{paper2/figs/overall_economy.jpg}
+%     \label{fig:steady_state_economy}
+% \end{center}
+% \end{figure}
+
+Figure \ref{fig:steady_state_economy} demonstrates the steady-state behaviour of the economy over time. I impose a business cycle that lasts for 50 time steps, hence the oscillating nature of the indicators represented (number of workers, unemployed persons, employed persons, vacancies, long-term unemployed persons, and target demand). Long-term unemployment is defined as any individual worker that has been unemployed for at least 7 time steps. 
+
+% \begin{figure}[h!]
+% \begin{center}
+%     \caption{}
+%     \includegraphics[scale = 0.15]{paper2/figs/ltuer_occ.jpg}
+%     \label{fig:steady_state_ltuer_occ}
+% \end{center}
+% \end{figure}
+Figure \ref{fig:steady_state_ltuer_occ} demonstrates the steady-state behaviour of the long-term unemployment rate (LTUER) by occupation and Figure \ref{fig:steady_state_ltuer_total} of the economy overall. The model without behavioural frictions sees occupations settle at occupation-level LTUERs that are nearly equal to the economy-wide LTUER as workers sort more seamlessly into open vacancies, regardless of even wage preferences. Both behavioural models demonstrate the fact that each occupation exhibits different long-term unemployment rates due to the incorporation of worker preferences and behaviour. 
+
+%Again, competition in the scenario with only wage preferences likely leads to the wider spread of occupation-level LTUERs whereas heterogeneous risk preferences ensure that workers do not react to wage offers similarly. 
+
+% \begin{figure}[h!]
+% \begin{center}
+%     \caption{}
+%     \includegraphics[scale = 0.15]{paper2/figs/ltuer_total.jpg}
+%     \label{fig:steady_state_ltuer_total}
+% \end{center}
+% \end{figure}
+
+Finally, I impose a synthetic shock to target demand to a high-employing occupation (represented by the purple line in Figure \ref{fig:shock_ltuer_occ}) at time t = 400, nearly halving its demand for labour.\footnote{I increase the target demand in the other occupations to ensure that aggregate demand remains the same in the overall economy.} I see already in this toy model, that the three model structures yield differing adjustment behaviour.\footnote{In the case of the model with wage preferences, the long-term unemployment rate spikes in the occupation that is affected by the shock by a higher degree than in the other two models, as evidenced in Figure \ref{fig:shock_ltuer_occ}. Arguably, all models see an upwards step shift in the economy-wide LTUER, but with both the non-behavioural and behavioural panels exhibiting a potential readjustment closer to the steady-state baseline value, although neither fully adjusts within the 600 post-shock time steps displayed in each of the figures.} Although this toy model leaves few, if any, real-world conclusions to be drawn, it serves as a useful proof of concept for two reasons. First, each model responds differently to a labour demand shock. Second, I demonstrate that a model based only on wage preferences shows significantly more volatility and imbalance than both the non-behavioural and behavioural models. By design, our risk aversion parameter is implemented in a way that ensures that workers allocate more efficiently across the wage distribution of vacancies offered rather than all valuing vacancies identically. All in all, this toy model serves as a proof of concept prior to incorporating real-world data.
+
+% \begin{figure}[h!]
+% \begin{center}
+%     \caption{}
+%     \includegraphics[scale = 0.15]{paper2/figs/ltuer_occ_shock.jpg}
+%     \label{fig:shock_ltuer_occ}
+% \end{center}
+% \end{figure}
+
+% \begin{figure}[h!]
+% \begin{center}
+%     \caption{}
+%     \includegraphics[scale = 0.15]{paper2/figs/ltuer_total_shock.jpg}
+%     \label{fig:shock_ltuer_total}
+% \end{center}
+% \end{figure}
+
+
+%\subsubsection{Proof of Concept: Preliminary Application to US Data}
+
+\subsection{To be done}
+\begin{itemize}
+    \item \textbf{Acquisition of French Data:} As noted in the introduction, a key worker preference that remains to be implemented is geography. Therefore, I aim to use the French data outlined in the Data section above. This will require an application for access to the French Comité du Secret Statistique by 29 April 2024 (with pre-approval from the data providers at INSEE required by 9 April 2024). I am in discussion with collaborators at Econophysix in Paris who already have access (including the requisite IT infrastructure) about potential collaboration and desk space in their Paris office during the summer of 2024. I am able to travel frequently to Paris at minimal cost and speak an adequate level of French which will considerably ease this effort.
+    \item \textbf{Empirically generated micro foundations:} Given the mentioned French data lends itself to measuring occupational transitions, understanding how the proposed micro foundations impact occupational transitions will be critical. Fortunately, the French national public employment service P\^{o}le Emploi has developed an Operational Directory of Occupations and Jobs (ROME) designed to provide a central occupational similarity crosswalk as a fundamental input to job recommendations made by the agency. This crosswalk provides a somewhat context- or behaviourally- agnostic representation of occupational similarity against which realised transitions can be compared. Thus, examining the difference between transitions predicted by this 'agnostic' crosswalk (ROME) and those observed in the aforementioned employee databases will ideally provide an empirical basis on which to calibrate the model outlined above.
+    \item \textbf{Impose 'green' shock:} The final application of the model constructed in this study will be to analyse the impact of a net-zero transformation on the French labour market. Variable and data selection as well as sufficient contextual surveying of the French labour market will be necessary to adequately and realistically approach this application.
+    \item \textbf{Job separations of employed workers:} Job transitions represented in the data used to build this model are not restricted to workers that are unemployed due to forcible separation. I aim to expand this model to incorporate job-to-job transitions as well to more accurately represent labour market dynamics.
+    \item \textbf{Validation}: I have identified some methodological challenges related to the tractability of output from the model and validation. I outline some preliminary thoughts on these issues in the Supplementary Materials.
+\end{itemize}	
+
+\subsection{Intended Conferences and Journals}
+Once ready, I intend to submit the products of this research to the European Association of Labour Economists and International Meeting on Experimental and Behavioral Social Sciences by Trinity Term of 2025. I have already submitted extended abstracts for consideration to the 27th Annual Workshop on Economics with Heterogeneous Interacting Agents taking place at the University of Bamburg in July 2024 and the Economic Policy in Complex Environments Conference taking place in Milan, Italy in July 2024.
+
+\printbibliography
+\end{refsection}
+\end{document}

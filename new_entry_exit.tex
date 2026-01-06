@@ -1,0 +1,207 @@
+
+\section*{Results Using New Entry and Exit Protocol}
+
+In the following section, I include the same results plots as in the previous section but from the model that includes a more realistic entry and exit protocol for workers. In this model we incorporate worker age (which is currently randomised though can be taken from median age data by occupation \href{https://www.bls.gov/cps/cps_aa2010.htm}{BLS Data on Occupational Demographic Characteristics - same source as our gender data}). 
+
+The entry and exit protocol is as follows:
+\begin{itemize}
+    \item Individuals over the age of 65 retire whether unemployed or employed. We could add some randomness added to this as well.
+    \item The same number of retired individuals are "entered" into the labour market into entry-level occupations relative to the occupation's proportion of total entry-level target demand. 
+    \item Notes:
+    \begin{itemize}
+        \item Occupations are designated as entry-level occupations if they have an experience requirement of "None" in the following \href{https://www.bls.gov/emp/tables/education-and-training-by-occupation.htm}{BLS data}
+        \item \textcolor{red}{Note that the education and training data is from 2023 and should ideally be initialised to the same year as the rest of the occupational characteristics (median wage, gender share).}
+    \end{itemize}
+    \item The new entrants enter employed, are designated a wage from the bottom 5th percentile of that occupation's wage distribution, a gender according to the current gender composition of the occupation, and an age of 18 plus the years required to obtain the minimum education requirement of that occupation which is also available in the \href{https://www.bls.gov/emp/tables/education-and-training-by-occupation.htm}{BLS data}. 
+\end{itemize}
+
+
+% in your document
+\begin{figure}[t]
+\centering
+\begin{tabular}{cc}
+% ------------ Row 1 ------------
+\begin{minipage}[t]{0.48\textwidth}\centering
+  \caption*{nonbehav}
+  \subcaptionbox{Heatmap}{
+    \includegraphics[width=\linewidth]{figs/new_entry_and_exit/grid_search_heatmap_nonbehav.png}
+  }\\[2mm]
+  \subcaptionbox{Best fit (uer–vacrate)}{
+    \includegraphics[width=\linewidth]{figs/new_entry_and_exit/best_fit_uer_vacrate_nonbehav.png}
+  }
+\end{minipage}
+&
+\begin{minipage}[t]{0.48\textwidth}\centering
+  \caption*{otj\_nonbehav}
+  \subcaptionbox{Heatmap}{
+    \includegraphics[width=\linewidth]{figs/new_entry_and_exit/grid_search_heatmap_otj_nonbehav.png}
+  }\\[2mm]
+  \subcaptionbox{Best fit (uer–vacrate)}{
+    \includegraphics[width=\linewidth]{figs/new_entry_and_exit/best_fit_uer_vacrate_otj_nonbehav.png}
+  }
+\end{minipage}
+\\[4mm]
+% ------------ Row 2 ------------
+\begin{minipage}[t]{0.48\textwidth}\centering
+  \caption*{otj\_cyclical\_e\_disc}
+  \subcaptionbox{Heatmap}{
+    \includegraphics[width=\linewidth]{figs/new_entry_and_exit/grid_search_heatmap_otj_cyclical_e_disc.png}
+  }\\[2mm]
+  \subcaptionbox{Best fit (uer–vacrate)}{
+    \includegraphics[width=\linewidth]{figs/new_entry_and_exit/best_fit_uer_vacrate_otj_cyclical_e_disc.png}
+  }
+
+\end{minipage}
+&
+\begin{minipage}[t]{0.48\textwidth}\centering
+  \caption*{otj\_disc}
+  \subcaptionbox{Heatmap}{
+    \includegraphics[width=\linewidth]{figs/new_entry_and_exit/grid_search_heatmap_otj_disc.png}
+  }\\[2mm]
+  \subcaptionbox{Best fit (uer–vacrate)}{
+    \includegraphics[width=\linewidth]{figs/new_entry_and_exit/best_fit_uer_vacrate_otj_disc.png}
+  }
+\end{minipage}
+\end{tabular}
+\caption{Grid search heatmaps and best-fit uer–vacancy-rate plots using more sophisticated entry-exit protocol}
+\label{fig:gridsearch_2x2_ee}
+\end{figure}
+
+\FloatBarrier
+\begin{figure}[ht]
+    \centering
+    \caption{Simulated UER and Vacancy rates compared to real data.}
+    \includegraphics[scale = 0.6]{figs/new_entry_and_exit/new_entry_and_exit/uer_vac.jpg}
+    \label{fig:uer_vac_rate_ee}
+\end{figure}
+
+\FloatBarrier
+
+
+\begin{figure}[ht]
+    \centering
+    \caption{Simulated vs. Observed Hires and Separations Rates}
+    \includegraphics[scale = 0.4]{figs/new_entry_and_exit/new_entry_and_exit/hires_seps_rate_grid.jpg}
+    \label{fig:hires_seps_rates_ee}
+\end{figure}
+
+\FloatBarrier
+
+\begin{figure}[ht]
+    \centering
+    \caption{Simulated Beveridge curve in behavioural versus non-behavioural model.}
+    \includegraphics[scale = 0.4]{figs/new_entry_and_exit/new_entry_and_exit/bev_curves.jpg}
+    \label{fig:beveridge_curve_ee}
+\end{figure}
+
+
+\begin{figure}[ht]
+\caption{Simulated versus Observed Job Search Effort}\label{fig:app_effort_valid_ee}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+    \centering
+        \caption{Application Effort by Unemployed Seekers in the Model}
+        \includegraphics[scale = 0.4]{figs/new_entry_and_exit/new_entry_and_exit/applications_per_unemployed_seeker.png}
+        \label{fig:app_effort_simulated_ee}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}[b]{\textwidth}
+        \caption{Unemployed Search Effort - Intensive Margin (Mukoyama et al.}
+        \includegraphics[scale = 0.5]{figs/intensive_search_margin.png}
+        \label{fig:app_effort_observed_ee}
+    \end{subfigure}
+    \end{figure}
+
+\FloatBarrier
+
+
+\begin{figure}
+\caption{Simulated versus Observed Job-Seeker Composition}\label{fig:job_seeker_valid_ee}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+    \centering
+        \caption{Observed composition of job-seekers}
+         \includegraphics[scale = 0.1]{figs/comp_searchers_plot.jpg}
+        \label{fig:seeker_composition_observed_ee}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}[b]{\textwidth}
+        \caption{Simulated composition of job-seekers.}
+             \centering
+             \includegraphics[scale = 0.5]{figs/new_entry_and_exit/new_entry_and_exit/seeker_composition.png}
+            \label{fig:seeker_composition_ee}
+    \end{subfigure}
+\end{figure}
+
+\FloatBarrier
+
+\begin{figure}
+    \caption{Simulated gender wage gap in behavioural versus non-behavioural model.}
+         \includegraphics[scale = 0.35]{figs/new_entry_and_exit/new_entry_and_exit/gender_wage_gaps.jpg}
+        \label{fig:gender_gap_ee}
+\end{figure}
+
+\FloatBarrier
+
+
+\begin{figure}[ht]
+\caption{LTUER Results}\label{fig:ltuer_res_ee}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/new_entry_and_exit/new_entry_and_exit/ltuer_line.jpg}
+        \caption{Simulated long-term unemployment in behavioural versus non-behavioural model.}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/new_entry_and_exit/new_entry_and_exit/ltuer_distributions.jpg}
+        \caption{End-of-simulation (2019Q2) distribution of unemployment duration for unemployed agents.}
+    \end{subfigure}
+
+\end{figure}
+
+\FloatBarrier
+
+\begin{figure}[ht]
+\caption{UER and LTUER Occupation Results}\label{fig:occ_uer_grids_ee}
+    \centering
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[height=0.43\textheight,keepaspectratio]{figs/new_entry_and_exit/new_entry_and_exit/occupation_uer_grid.png}
+        \caption{Simulated mean UER versus observed values.}
+    \end{subfigure}
+    \medskip
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \includegraphics[height=0.43\textheight,keepaspectratio]{figs/new_entry_and_exit/new_entry_and_exit/occupation_ltuer_grid.png}
+        \caption{Simulated mean LTUER versus observed values.}
+    \end{subfigure}
+
+\end{figure}
+
+\FloatBarrier
+
+
+\begin{figure}[ht]
+\begin{subfigure}[b]{\textwidth}
+    \centering
+    \caption{Simulated Wage Losses}
+    \includegraphics[scale = 0.3]{figs/new_entry_and_exit/new_entry_and_exit/relative_wages.jpg}
+    \label{fig:relative_wages_ee}
+\end{subfigure}
+
+\begin{subfigure}[b]{\textwidth}
+    \caption{Observed post-separation wage losses}
+    Taken from Henry S. Farber, Employment, Hours, and Earnings Consequences of Job Loss: US Evidence from the Displaced Workers Survey. \emph{Journal of Labor Economics} 2017.
+    \centering
+    \includegraphics[scale = 0.7]{figs/farber_validation_wage_losses.png}
+    \label{fig:farber_validation_wage_losses_ee}
+\end{subfigure}
+\end{figure}
+
+\FloatBarrier
+
+
+
+

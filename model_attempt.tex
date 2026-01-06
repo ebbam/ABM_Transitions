@@ -1,0 +1,353 @@
+
+\subsection{Model}
+
+Time is discrete, indexed by $t=0,1,2,\dots$. The labor market contains a finite set of occupations $\mathcal{I}$, and a worker is characterized by an origin occupation $i\in\mathcal{I}$.  At month $t$ the economy comprises unemployed workers $\mathcal U_t$, employed workers $\mathcal E_t$ and vacancies $\mathcal V_t$. Labor-market tightness is defined broadly as:
+\[
+\varphi_t \;\equiv\; \frac{|\mathcal V_t|}{|\mathcal U_t|}
+\]
+and, analogously, for specific occupation $i$ as:
+
+\[\varphi_{i,t} \; =  \frac{V_{i,t}}{\mathcal U_{i,t}}\]
+
+All occupations $\mathcal{I}$ are situated in a network where directed edges from occupation $i$ to $j$ are weighted by their occupational similarity $\rho_{ij}\in[0,1]$.  In the agent-based model, this occupational similarity is drawn from realized transitions, but in this more general form, this occupational similarity index should be considered a measure of ``transition-ability'' between occupation $i$ and $j$, indicating the extent to which a worker from occupation $i$ could take on the tasks and work of occupation $j$. All occupations $\mathcal{I}$ are additionally characterized by a wage $w_j$ which sets the wage offer of any open vacancies in occupation $j$.
+
+% \subsection{(PLACEHOLDER) Labor Demand}
+
+% \textcolor{violet}{To bring this from a micro optimisation problem to a labor market model, we need to describe the labor demand process. I think this is the appropriate place to fill this in from the main text.}
+
+% \noindent Target demand...
+% \begin{align}
+% d_{jt} = e_{jt} + v_{jt}
+% \end{align}
+% Vacancies...
+% \begin{align}
+% \mathcal V_t = \sum_{j = 1}^n v_{jt} 
+% \end{align}
+% Employment...
+% \begin{align}
+% \mathcal E_t = \sum_{j = 1}^n e_{jt} 
+% \end{align}
+% Unemployment...
+% \begin{align}
+% \mathcal U_t = \sum_{j = 1}^n u_{jt} 
+% \end{align}
+
+\subsection{Unemployed Search}
+
+In each period $t$, an unemployed worker $b$ chooses how many applications to submit to ranked vacancies to maximize their expected utility. Applications incur a fixed per-application cost $c>0$. The worker's optimization problem is therefore to select the number of applications $A_t\in\{0,1,\dots,\bar A\}$ to send at time $t$ to maximize their expected utility, where $\bar A$ is finite. Seekers are subject to a budget constraint such that $Ac < C$, where $C$ is their total budget. 
+
+In addition to their most recently held occupation $i$, the unemployed worker $b$ is characterized by their unemployment duration $\tau_{b,t}$, utility function defined by constant relative risk aversion attenuated by parameter $\lambda_b$, reservation wage $R_{b,\tau}$, and a subjective re-employment success belief $\beta_{b,\tau}\in[0,1]$, each of which is explained below. Variables are denoted using $t$ ($\tau$) when their values are subject to time-specific (individual unemployment duration-specific) variation.
+
+Let $V_t^i\subseteq \mathcal V_t$ denote vacancies in the economy relevant to occupation $i$ where relevance is defined by $\rho_{ij} > 0$. Let $A_t^b\subseteq V_t^i$ denote the subset of these relevant vacancies that an individual job-seeker $b$ chooses to apply to. 
+% Wage offers in occupation $j$ are drawn from a log-normal distribution around occupational wage quantiles available from the BLS Occupational Employment and Wage Program. $w_j$ is restricted to [\$15,080, \$250,000] where the minimum bound is equivalent to the federal minimum annual wage and the upper bound is \textcolor{red}{\emph{a reasonably high salary}}.
+
+\paragraph{Reservation wage.}
+First, worker $b$ restricts the observed vacancy set to $V_t^i$ to those vacancies where the vacancy's wage $w_{j,t}\geq R_{b,t}$. Reservation wage $R_{b,t}$ is defined as follows:
+
+\begin{equation}
+\label{eq:R}
+R_{b,t}\;=\;\max\big \{\underline{w}\ ,  (1-\psi \tau_{b,t})w_b^{\text{ref}}\big\}
+\end{equation}
+
+
+
+where $\psi$ captures general disutility from unemployment (stemming from stigma, loss of confidence, financial precarity), $\tau_{b,t}$ is the worker’s current unemployment duration, and $w_b^{\text{ref}}$ is their latest held wage in occupation $i$. The reservation wage has a minimum bound $\underline{w}$.
+
+\paragraph{Vacancy valuation.} 
+Next, worker $b$ ranks available vacancies according to a risk-adjusted utility function. Wage preferences are defined by constant relative risk aversion (CRRA), mediated by match quality or occupational similarity $\rho_{ij}$ :
+\begin{equation}\label{eq:crra}
+u_{b}(w_{j,t})=
+\begin{cases}
+\dfrac{(\rho_{ij}w_{j,t})^{1-\lambda_b}}{1-\lambda_b}, & \lambda_b\neq 1,\\[0.35em]
+\ln (\rho_{ij}w_{j,t}), & \lambda_b=1.
+\end{cases}
+\end{equation}
+
+where \( \lambda_b \) represents agent \( b \)'s risk aversion: \\
+ \( \lambda_b > 0 \): risk averse (concave utility) \\
+ \( \lambda_b < 0 \): risk seeking (convex utility) \\
+ \( \lambda_b = 0 \): risk neutral (linear utility) \\
+
+\paragraph{Per-application subjective success probabilities.} Next, we extend this utility function to an expected utility framework through the incorporation of a subjective belief updating process, allowing the worker's subjective beliefs to factor into the decision-making process. 
+
+Let \(p_{a,t}\) denote the worker's \emph{subjective belief} about the probability that the \(a\)-th application submitted (in rank order according to \autoref{eq:crra})  in period \(t\) yields a job offer. This probability is jointly determined by the worker's subjective belief $\beta_{b,t}\in[0,1]$ (a reflection of confidence or self-efficacy) of their re-employability, an indicator of match likelihood $m_{ij,t}$, and a probability decay parameter $\gamma$ which reflects the decreasing probability of a match as a worker descends their ranked application set. $m_{ij,t}$ is a function of competition in the target occupation $j$ ($\varphi_{j,t}$) such that:
+
+\[m_{ij,t} = f(\varphi_{j,t})\]
+
+As such, $m_{ij,t} \in [0,1]$. 
+
+In this expected utility framework, the similarity index $\rho_{ij}$ modifies the utility directly by adjusting for match \textit{quality} (a higher $\rho_{ij}$ implies a better match and thus greater value derived from the job), whereas $m_{ij,t}$ adjusts for match \textit{likelihood} given competition effects. This version formalizes the idea that both \emph{uncertainty} via $m_{ij,t}$ and \emph{match quality} via $\rho$ contribute to how the worker perceives the value of a job offer, while remaining grounded in von Neumann–Morgenstern expected utility theory.
+
+As such, the subjective probability of success of the $a$-th application ($p_{a,t}$) is a value that decreases in relation to the subjective probability of success of the top vacancy in the ranked set $p_{1,t}$. $p_{a,t} \in [0,1] $to ensure valid probabilities.
+\begin{align}
+%p_{1,t}  &= \beta_{b,t}\,\varphi_{i,t}\,\rho_{i(1)}^{\eta},\\\label{eq:original_p_1_t}
+p_{1,t}  &= \beta_{b,\tau}\,m_{i(1),t}^{\eta},\\\label{eq:new_p_1_t}
+p_{a,t} &= \max\{p_{1,t}-\gamma (a-1),\,0\}
+\end{align}
+
+\paragraph{Sticky belief updating.} Beliefs are updated according to \autoref{eq:belief}
+\begin{equation}
+\label{eq:belief}
+\beta_{b,\tau}\;=\;\beta_{b,\tau-1} \;+\; \alpha_\tau\big(h_{b,\tau-1}-r\big),
+\qquad
+\alpha_\tau \;=\; e^{-\omega \tau}
+%\alpha_t \;=\; 1 - e^{-\omega t},
+\end{equation}
+where $h_{b,\tau-1}=1$ if the previous application succeeded (and $0$ otherwise), $r$ is the benchmark learning rate, $\omega>0$ is a curvature parameter, and $\alpha_\tau$ delivers concave (saturating) learning.
+
+This functional form for $\alpha$ implies diminishing sensitivity over time, consistent with concave learning in line with the findings of \cite{muellerJobSeekersPerceptions2021} who demonstrate that job seekers’ beliefs are sticky and adjust slowly downward over time.
+
+% This captures that as you go down the list, both wages and fit fall. also maybe we need the search cost to be weakly convex in applications and then a simple rule that says taht MB greater or equal MC so that you apply to an additional vacancy untill at the smallest $A_t$ such that $\mathrm{MB}_{A_t}<\mathrm{MC}_{A_t}$.} 
+
+\paragraph{Marginal benefit of the \(a\)-th application.}
+Thus, if the worker submits applications in a ranked order \(a=1,2,\dots\), and the per-rank success probabilities in period \(t\) are \(p_{1,t},p_{2,t},\dots\), then the \emph{marginal} probability that the \(a\)-th application yields the \emph{first} success is
+\begin{equation}\label{eq:deltaP}
+\Delta P_t(a) \;=\; \left(\prod_{j=1}^{a-1} (1-p_{j,t})\right)\, p_{a,t},
+\end{equation}
+and if we use $u_b(v_a)-u_b(B^U)$ to represent the utility surplus of gaining employment in vacancy $a$ relative to remaining unemployed, then the expected utility from applying to A applications is:
+
+
+\begin{align}
+EU_t(A)=u_b(B^U) -cA+ \sum_{a=1}^{A} \Delta P_t(a)(u_b(v_a)-u_b(B^U))
+\end{align}
+
+% \begin{align}
+%     \Delta B^U = B^E - B^U
+% \end{align}
+
+\paragraph{Discrete marginal-cost decision rule.}
+
+
+Thus, the perceived marginal gain from adding an additional application a is
+\begin{align}
+\Delta EU_t(a)= P_t(a)(u_b(v_a)-u_b(B^U))-c
+\end{align}
+
+Then, the decision rule is: 
+
+\begin{equation}\label{eq:Astar_discrete}
+A^\star_t \;=\; \arg\max\Big\{\, a\leq\bar A\ : MB_t(a) \ge c \,\Big\},
+\end{equation}
+
+where \begin{equation}\label{eq:MB_def}
+\mathrm{MB}_t(a) \;=\; \Delta P_t(a)(u_b(v_a)-u_b(B^U).
+\end{equation}
+
+Thus, the worker applies until the perceived marginal expected utility of the next application $a$ falls below the cost per application $c$.  Because applications are discrete and limited by an upper bound \(\bar A\), the optimal number of applications in period \(t\) is $A^{\star}_t$.
+
+These rules impose that our incorporated forms of adaptive behavior (reservation wages and search effort) operate differently to increase the chances of re-employment. The reservation wage broadens the available application set of the agent and sticky beliefs influence application effort through an adaptive learning process.
+
+The below plots demonstrate initial comparative statics about these decision rule using the following parameter values: $T=50, \beta_0 =0.7, \omega=0.01, r = 0.1, \bar A = 10, \Delta B = 50$. \autoref{fig:param_trajectores} demonstrates the trajectories of parameter $\beta_b$ and its effect on the size of the optimal application set, perceived probability of success, and marginal probability of success. The incorporation of slowly decaying beliefs induces concavity in search effort.
+
+\FloatBarrier
+\FloatBarrier
+\begin{figure}[ht]
+  \centering
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/theor_job_search_model/mb_heatmap.png}
+    \caption{Heatmap of marginal benefits by duration and cost.}
+    \label{fig:mb_heatmap}
+    
+  \end{subfigure}
+  \hfill
+  \vspace{0.8em} % small vertical gap between rows
+
+  \begin{subfigure}[t]{0.6\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/theor_job_search_model/parameter_trajectories.png}
+    \caption{Value trajectories in stylized model with fixed parameters.}
+    \label{fig:param_trajectores}
+  \end{subfigure}
+
+  \caption{}
+  \label{fig:theor_job_search_panels}
+\end{figure}
+\FloatBarrier
+
+\subsection{Employed Search}
+
+\paragraph{Participation decision.}
+Employed individuals are subject to a different decision relative to unemployed workers because they retain an outside option, i.e., remaining in their current job. Though they are similarly affected by their subjective beliefs about their re-employability, their initial decision about whether to actively engage in on-the-job search $P^{OTJ}_{it}$ is driven by their perceived labor market tightness. In particular, an employed worker $i$ with current wage $w_i$ decides whether to search on the job as a function of market tightness and beliefs. This means that their probability of searching is:
+
+\begin{equation}
+\label{eq:otj_participation}
+P^{\text{OTJ}}_{i,t}(\varphi_t) \;=\; \frac{1}{1+\exp\!\Big(-\big[\delta + \beta_{i,t}\,\varphi_t\big]\Big)},
+\end{equation}
+where, as in the model above, $\beta_{i,t}$ $\in[0,1]$ is the worker's subjective confidence in re-employment  success (confidence) which either increases or decreases the pressure of competition $\varphi_t$ and $\delta$ is a fixed likelihood of search across all employed workers. Search occurs when $P^{\text{OTJ}}_{i,t}\ge \kappa$, for some threshold $\kappa\in(0,1)$, implying a saturating (logistic) relationship between market conditions and search participation. This rule enforces that, as in the ABM, employed seekers exhibit diminishing marginal likelihood of search as a function of competition.
+
+\paragraph{Application Decision}
+
+Conditional on searching, the worker observes the set of relevant vacancies $V_t^i\subseteq\mathcal V_t$ (defined as in the unemployed case by $\rho_{ij}>0$) and restricts attention to vacancies that constitute an ``upgrade'' over the current job. 
+
+The worker ranks vacancies in $V_t^i$ in the same way unemployed workers do according to \autoref{eq:crra}. The worker then chooses whether to apply to the top-ranked vacancy in the set or not, maximizing perceived marginal benefit. Let $c$ again denote the cost of applying to vacancy $a$.  In order to align with the functionality in the ABM, where employed workers only send one application per time period, though this can be extended to a multiple-application case as in the formulation for unemployed workers above.
+
+In the one-application case, we capture this via a simple employed reservation rule:
+\begin{equation}
+\label{eq:employed_upgrade_rule}
+\mathcal V^{E}_{i,t}\;=\;\{\, v\in V_t^i : w_v \ge w_i \,\}.
+\end{equation}
+Employed workers are not subject to duration-dependent reservation wage dynamics in this model; rather, they only consider vacancies that weakly dominate the current wage.
+
+Vacancies in $\mathcal V^{E}_{i,t}$ are valued using the same match-quality-adjusted CRRA utility as for unemployed workers (see \autoref{eq:crra}), with match quality proxied by occupational similarity $\rho_{ij}$. Let $j(v)$ denote the occupation associated with vacancy $v$. 
+
+The utility gain from switching to vacancy $v$ relative to remaining employed in $i$ is
+\begin{equation}
+\label{eq:employed_surplus}
+\Delta u_i(v)\;=\;u_i(w_v,\rho_{i\,j(v)}) \;-\; u_i(w_i,1).
+\end{equation}
+
+As in the unemployed case, workers form a subjective probability of receiving an offer. Let $m_{i\,j(v),t}\in[0,1]$ denote a match-likelihood term (increasing in destination-market tightness, as specified earlier), and let $\eta>0$ be a curvature parameter. Then the perceived success probability for applying to $v$ is
+\begin{equation}
+\label{eq:employed_success_prob}
+p_{i,t}(v)\;=\;\beta_{i,t}\,m_{i\,j(v),t}^{\eta}.
+\end{equation}
+
+Let $c>0$ denote the per-application cost. Conditional on searching, the worker selects at most one vacancy to apply to. The expected utility from applying to vacancy $v$ (and accepting the offer if received) is
+\begin{equation}
+\label{eq:EU_employed_apply}
+EU^{S}_{i,t}(v)\;=\;(1-p_{i,t}(v_a))\,u_i(v_a)\;+\;p_{i,t}(v_a)\,u_i(v_a)\;-\;c.
+\end{equation}
+Subtracting the outside option of not applying, $u_i(w_i,1)$, yields the expected surplus from applying:
+\begin{equation}
+\label{eq:EU_employed_surplus}
+\Delta EU_{i,t}(v)\;=\;p_{i,t}(v)\,\Delta u_i(v)\;-\;c.
+\end{equation}
+
+Define the marginal benefit of applying to vacancy $v$ as
+\begin{equation}
+\label{eq:MB_employed}
+MB_{i,t}(v)\;=\;p_{i,t}(v)\,\Delta u_i(v).
+\end{equation}
+The worker applies to the vacancy that maximizes this expected benefit, provided it exceeds the application cost. That is, conditional on searching,
+\begin{equation}
+\label{eq:employed_apply_rule}
+A^{\star}_{i,t}
+=
+\begin{cases}
+1, & \text{if }\displaystyle \max_{v\in \mathcal V^{E}_{i,t}} MB_{i,t}(v)\;\ge\;c,\\[0.8em]
+0, & \text{otherwise,}
+\end{cases}
+\qquad
+v^{\star}_{i,t}\in \arg\max_{v\in \mathcal V^{E}_{i,t}} MB_{i,t}(v).
+\end{equation}
+Thus, employed workers first decide whether to engage in OTJ search via \autoref{eq:otj_participation} and, if they search, submit a single application to the vacancy offering the highest perceived expected surplus, net of application cost.
+
+% I THINK THIS BELOW IS WRONG Next, we have two options for creating the vacancy set, conditional on the worker choosing to search. First, analogous to the formulation for unemployed workers, employed workers choose an application set subject to a total budget constraint $C$. 
+
+% Unlike unemployed workers, employed workers are subject to a strict budget constraint where they restrict the observed vacancy set $V_t^i$ to those vacancies where the vacancy's wage offer is strictly greater than the current wage they hold in occupation $i$. As such, the vacancy set considered for application is formulated below where $\delta > 0$ allows for a stricter reservation wage setting, wherein employed workers set an update requirement. In other words, employed workers do not update reservation wages; instead they apply only to vacancies that strictly dominate their current wage.
+
+% \begin{align}
+% V_{i,t}^E=\{v∈V_t^i: w_j ≥(1+\delta)w_i\}
+% \end{align}
+
+% \begin{enumerate}
+%     \item \textbf{Optimal Application}
+
+% They then choose the single vacancy that maximizes the perceived marginal benefit of applying
+% \begin{equation}\label{eq:astar_single}
+%     a_t^\star \;=\;
+%     \begin{cases}
+%         \arg\max_{a\in\{1,\dots,\bar A\}}
+%         \big\{\, \mathrm{MB}_t(a) - c \,\big\},
+%         & \text{if }\max_{a}\,\mathrm{MB}_t(a) \;\ge\; c, \\
+%         0, & \text{otherwise}.
+%     \end{cases}
+% \end{equation}
+% If no available vacancies offer a marginal benefit exceeding the application cost, the worker applies to no jobs.
+
+% \item \textbf{Optimal Application Set}
+
+% \subsubsection*{Marginal Benefit Calculation}
+
+% Conditional on participating in search, the employed worker engages in a similar utility maximization process as the unemployed workers, albeit with a different marginal benefit rule. Employed workers are not weighing the relative utility of employment versus unemployment, rather, the relative utility of employment in occupation $i$ versus vacancy $a$ given application cost $c$. Thus, the perceived expected utility of applying to A vacancies:
+
+% \begin{align}
+% EU_t(A)=P^{OTJ}\big ( (1-m_{ij,t})u_i(E^i) + m_{ij,t}u_i(v^a)A - c\big) + (1-P^{OTJ})u_i(E^i)
+% \end{align}
+
+% which is equivalent to:
+% \begin{align}
+% EU_t(OTJ) = u_i(E^i) + P^{OTJ}\big[m_{ij,t}(u_i(v^a)A - u_i(E^i)) - c\big]
+% \end{align}
+
+% In this case, aligned with the functionality of our ABM where employed workers send one application conditional on searching, the set $A$ is finite containing $a\in{0,1}$, allowing for the simplified notation above. Thus, the perceived marginal utility of applying to a:
+
+% \begin{align}
+% \Delta EU_t(a)= m_{ij,t}u_i(v_a)-c
+% \end{align}
+
+% and the marginal benefit of applying to vacancy $a$ is:
+
+% \begin{equation}
+%     \mathrm{MB}_t(a) \;=\;  m_{ij}u_i(v^a) 
+% \end{equation}
+
+% arriving at the cost minimization rule in \autoref{eq:Astar_discrete_emp}.
+
+\noindent\textbf{Testable implications.} (i) $R_{i,t}$ declines linearly, expanding the acceptable set $\{j:w_j\ge R_{i,t}\}$ and raising exit hazards. (ii) OTJ participation is pro-cyclical (increasing in $\varphi_t$), altering the composition of applicants over the cycle and crowding queues faced by the unemployed.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lll}
+\hline
+\textbf{Symbol} & \textbf{Meaning} & \\[2pt]
+\hline
+$\mathcal{I}$ & Set of occupations & \\
+$\mathcal{U}_t$ & Set of unemployed workers at time $t$ & \\
+$\mathcal{V}_t$ & Set of vacancies at time $t$ & \\
+$\mathcal{E}_t$ & Set of employed workers at time $t$ & \\
+$\varphi_t$ & Market tightness $|\mathcal V_t| / |\mathcal U_t|$ & \\
+$w_{j,t}$ & Wage offered by vacancy in occupation $j$ at time $t$ & \\
+& & \\
+& & \\
+& & \\
+
+\textbf{Worker-related variables} & & \\
+$B^U$& Value of unemployment& \\
+$E^i$& Value of employment in occupation $i$ & \\
+$\beta_{b,t}$ & Subjective belief of worker from occupation $i$ about job-finding& \\
+$\beta_i$ & Fixed subjective belief of worker from occupation $i$ about job-finding& \\
+$P(h_{i,t} = 1)$ & Job-finding outcome ($1$ if hired, $0$ otherwise) & \\
+$w_b^{ref}$& Reference wage (latest held) for unemployed workers & \\
+$A_t$ & Set of vacancies found to apply to at time $t$ & \\
+$a$ & Vacancy rank in worker’s preference ordering & \\
+$\bar{A}$ & Maximum possible applications per period & \\
+$A^\star_t$ & Optimal number of applications / chosen set size & \\[4pt]
+
+\textbf{Matching and success probabilities} & & \\
+$p_{a,t}$ & Success probability for vacancy of rank $a$ at time $t$ & \\
+$p_{1,t}$ & Baseline success probability for top-ranked vacancy & \\
+$\gamma$ & Suitability / decay profile across ranked applications & \\
+$\rho_{ij}$ & Occupational similarity between occupations $i$ and $j$ & \\
+$m_{ij,t}$& Matching probability of worker $i$ with vacancy $j$ & \\
+$\mathrm{MB}_t(a)$ & Marginal benefit of applying to vacancy rank $a$ & \\[4pt]
+
+\textbf{Belief updating} & & \\
+$\alpha$ & Learning-rate parameter & \\
+$\omega$ & Curvature parameter in belief updating function & \\
+$r$ & Weight on application outcome ($P(h_{i,t} = 1)$) & \\[4pt]
+
+\textbf{Costs, budgets, and constraints} & & \\
+$c$ & Per-application search cost & \\
+$C$& Total application/search-time budget in period $t$ & \\[4pt]
+$R_{b,t}$& & \\
+$w$& Minimum reservation wage requirement & \\
+& & \\
+
+\textbf{Decision and participation} & & \\
+$\delta$ & The fixed propensity to search by employed workers & \\
+$\kappa$ & Threshold for on-the-job search participation & \\[4pt]
+
+% \textbf{Parameters and exogenous objects} & & \\
+% $\gamma$ & Decay rate of match probability across ranks & \\
+% $\eta$ & Elasticity of matching w.r.t. occupational similarity & \\
+% $\delta$ & Discount factor & \\
+% $\mu_j, \sigma_j$ & Lognormal wage distribution parameters for occupation $j$ & \\
+
+\hline
+\end{tabular}
+\caption{Notation and Definitions Used in the Model}
+\label{tbl:parameters}
+\end{table}
+

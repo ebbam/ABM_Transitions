@@ -1,0 +1,260 @@
+\section{Miscellaneous Discussions}
+
+\subsection{US BLS Ten-year-ahead Employment Projections}
+ \emph{\href{https://www.bls.gov/emp/tables.htm}{Source}}
+
+Target demand responds uniformly to fluctuations in GDP. We believe that this assumption of uniformity is highly unrealistic. Rather, we are interested in incorporating occupation-specific target demand such that occupational risks can be assessed using this model. The US Bureau of Labor Statistics provides ten-year-ahead occupational employment projections we could use to test the performance of our model over time \emph{\href{https://www.bls.gov/emp/tables.htm}{Source}}. Figure \ref{fig:bls_pastprojs_} shows the forecast by occupation including a shaded area that shows the years for which we have a real-world observation (ie. forecasts that have materialised). Figures \ref{fig:bls_proj_high_level}-\ref{fig:bls_projs} show the occupational detail per forecast/projection by ranking the projected percent change in employment in each occupation. We believe that such data could be useful for bringing greater granularity to our model results when applied to assess the central research question regarding the potential heterogeneous impacts of economic or structural transformation.
+
+ The US Bureau of Labor Statistics provides ten-year-ahead occupational employment projections we could use to test the performance of our model over time. Figure \ref{fig:bls_pastprojs_} shows the forecast by occupation including a shaded area that shows the years for which we have a real-world observation (ie. forecasts that have materialised). Figures \ref{fig:bls_proj_high_level}-\ref{fig:bls_projs} show the occupational detail per forecast/projection by ranking the projected percent change in employment in each occupation. 
+ 
+\begin{figure}[ht]
+    \centering
+    \caption{Past BLS 2018-2022 (+10-year) Employment Projections}
+    \includegraphics[scale = 0.13]{figs/bls_real_forecast_values.jpg}
+    \label{fig:bls_pastprojs_}
+\end{figure}
+
+\FloatBarrier
+
+
+\begin{figure}[ht]
+    \centering
+    \caption{BLS 2023-2033 Employment Projections (1)}
+    \includegraphics[scale = 0.1]{figs/bls_high_level_pct.jpg}
+    \label{fig:bls_proj_high_level}
+\end{figure}
+
+\FloatBarrier
+
+\begin{figure}
+    \caption{BLS Occupation-level Employment Projections by Varying Degree of Occupational Specificity}
+     \centering
+     \begin{subfigure}[b]{\textwidth}
+    \centering
+    \caption{BLS 2023-2033 Employment Projections}
+    \includegraphics[scale = 0.1]{figs/bls_summary_level_pct.jpg}
+    \label{fig:bls_proj_summary_level}
+     \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+    \centering
+    \caption{BLS 2023-2033 Employment Projections}
+    \includegraphics[scale = 0.1]{figs/bls_low_level_pct.jpg}
+    \label{fig:bls_proj__lowlevel}
+     \end{subfigure}
+    \label{fig:bls_projs}
+\end{figure}
+
+\FloatBarrier
+\subsection{Scenarios}
+
+A few possible options:
+
+\subsubsection{Green transition scenario with two options from the National Renewable Energy Laboratory}
+    \begin{itemize}
+        \item Regional Energy Deployment System Model (Capacity planning model for the power sector (disaggregated to state level))
+        \item Jobs \& Economic Development Model (JEDI): “estimate the economic impacts of constructing and operating power plants, fuel production facilities, and other projects at the local (usually state) level. JEDI results are intended to be estimates, not precise predictions.”
+    \end{itemize}
+
+    
+\subsubsection{Pandemic Alternate Scenarios Projections}
+
+\emph{\href{https://www.bls.gov/emp/publications/pandemic-scenarios.htm}{(Source)}}
+
+The BLS produces regular employment projections (the most recent being the above mentioned one for 2023-2033). The 2019-29 employment projections were built on data predating the pandemic, therefore the BLS produced two alternate scenario projections with the principal objective of "identify[ing] industries and occupations whose employment trajectories are subject to higher levels of uncertainty." In Figure \ref{fig:bls_pandemic_projs}, projections for the moderate scenario is displayed in green and the stronger scenario in orange. The BLS describes the two scenarios as follows \href{https://www.bls.gov/opub/mlr/2021/article/employment-projections-in-a-pandemic-environment.htm}{(Source)}:
+
+\emph{"Two alternate scenarios, moderate impact and strong impact, were modeled as possible paths for the U.S. economy for 2019–29. The terms “moderate” and “strong” refer to the extent of long-term economic changes resulting from the pandemic. The strong impact scenario assumes more widespread, permanent changes to consumer and firm behavior as a way to mitigate viral spread.}
+
+\emph{The moderate scenario accommodates:}
+\begin{itemize}
+    \item \emph{\textbf{increased telework is the primary force of economic change and has both direct and spillover effects.} With more employees teleworking, the need for office space will decline, and so will nonresidential construction. Spending for employee trips to offices, including commuting costs, business travel, and lunchtime restaurant spending, are all lower here than in the baseline projections. }
+    \item \emph{\textbf{several industries and occupational groups are projected to see increased demand in the moderate impact scenario.}}
+    \begin{itemize}
+        \item \emph{Increased telework will drive demand for information technology (IT) and computer-related occupations, particularly those involved in IT security.}
+        \item \emph{Changes in food consumption as a result of lower restaurant spending will lead to more spending at and employment in grocery stores.}
+        \item \emph{Public demand for better prevention, containment, and treatment of infectious diseases is also expected to lead to increased scientific and medical research funding.}
+    \end{itemize}
+\end{itemize}
+
+\emph{The "strong" scenario incorporates the above but consumer and firm behaviors associated with them are amplified. Consumer preference for avoiding interpersonal contact leads to further declines for restaurant dining, travel, and accommodation. Telework continues to expand, leading to further gains for associated IT support positions. Additionally, people’s desire to avoid large crowds leads to declines in employment demand for industries that depend on large gatherings, including live sporting events, theaters, and concerts. Further efforts to avoid interpersonal contact also lead to more virtual services than in-person services, including telehealth, and to the automation of many in-person customer service positions."}
+
+\begin{figure}[ht]
+    \centering
+    \caption{BLS Pandemic Scenario Projections}
+    \includegraphics[scale = 0.12]{figs/bls_pandemic_scenarios_pct.jpg}
+    \label{fig:bls_pandemic_projs}
+\end{figure}
+
+\FloatBarrier
+
+
+\subsubsection{Post-2008 Financial Crisis: Gendered labor market outcomes}
+
+Another possible option is to look at the difference in unemployment rate recovery between men and women following the 2008 financial crisis, as indicated in Figure \href{fig:uer_gender_2008} (Female unemployment rate in pink and male unemployment rate in blue - \textcolor{red}{I will change those colors}). Stefi shared an interesting article on risk preferences changing differently for men and women following the 2008 financial crisis which could be interesting to explore in this case. Such an application would require looking carefully at the extent to which women leaving the labor force might contribute to a lower UER.
+
+\begin{figure}[ht]
+    \centering
+    \caption{Female and Male Unemployment Rates}
+    \includegraphics[scale = 0.5]{figs/UER_gender.png}
+    \label{fig:uer_gender_2008}
+\end{figure}
+
+The below sections include some ongoing discussions and suggested ideas that are still important to note - I have included them here to remove them from the current body of the paper. I have tried to number them to keep them organised. 
+
+\subsection{Proposal on Employed Search -- stefi}
+
+We model the job search as a competition between an old  job and a newly appearing vacancy. Agents can choose between option B, remaining in current job i.e. the status quo, and option A, the new vacancy. 
+
+The utility each agent obtains from the options depends on the intrinsic value of each alternative (i.e. wage) as well as on the popularity of the job (i.e. how many are already carrying out that job) \color{red} as well as SKILLs? see my last point in red \color{black}. 
+
+In each period, one vacancy opens and agents are given the opportunity to apply and they do so based on a standard discrete choice model.  The probability agents will best respond depends on exogenous parameters ($\beta$ see below).
+
+\subsubsection{The logit choice function}
+The set of actions available to each player is $X$, $X=\{A, B\}$. 
+
+Each agent can choose between A and B. Option B is the \textit{status quo} whereas A is the newly open job vacancy.
+Time periods are discrete and denoted by $t=1, 2, 3, ..., T$. 
+The system starts with a share $x$ of the population choosing B and the rest adopting A. 
+The payoff agent $i$ receives in any given period $t$ from option $A$ or $B$ is conditional on the intrinsic utility that one derives from the two available options (i.e. the wage they derive from A and B) as well as the choices made by others. 
+
+Therefore the payoffs to $i$ are:
+\begin{equation}
+u_{t}(B)= \lambda^{B}+\rho x_{t-1}
+\label{eq1}
+\end{equation}
+\begin{equation}
+u_{t}(A)= \lambda^{A}+\rho (1-x_{t-1})
+\label{eq2}
+\end{equation}
+\noindent
+where $\lambda^{A}$ and $ \lambda^{B}$ represent the inherent values of adopting choice A and B respectively. We assume that there is no progress and thus $\lambda^{A}$  and $\lambda^{B}$ are identical across players and constant over time. But we also assume that one action is always intrinsically more profitable than the other (i.e. $\lambda = \lambda^{A}-\lambda^{B} \neq 0$). 
+
+Moreover, the payoffs depend on the share of the population that chooses $A$ or $B$. This is a perfectly observable information. $x_{t-1}$ denotes the share of individuals who chose B at $t-1$. By the same token, $1-x_{t-1}$ is the proportion of population members who chose option A.  
+
+The parameter $\rho$ represents the intensity of positive externalities in agent's decision or differently a measure of the disutility of non-conformance.\footnote{Externalities do not have to be positive. In some instances, social interactions could generate negative feedback, as in the case of conspicuous consumption aimed at an increase in status. \color{red} maybe we want this?\color{black} } It is greater than 0 and is assumed to be same for both options. The quantity $\rho x_{t-1}$ ( or $\rho (1-x_{t-1}$)) represents thus the self-reinforcing effect of decision externalities. 
+
+Every period, one vacancy opens up and agents are given the opportunity to update their choice action. 
+
+When given the chance to revise, worker $i$ observes the action of the other members of the population. The probability of choosing option B is given by the logit choice function. According to this model the probability of deviating from the best response declines when the loss in utility increases.
+The log probability of choosing B minus the log probability of choosing A corresponds to $\beta$ times the payoff difference between the two options (i.e.$\Delta u_t =u_t(A)-u_t(B)$). 
+
+The parameter $\beta$ is generically defined as intensity of choice parameter but has also been interpreted as a measure of irrationality , inattention  or implementation costs \color{red} or GEOGRAPHICAL COSTS? IN OUR CASE?\color{black} We consider $\beta$ as exogenously given, time invariant and homogeneous across population's members. If $\beta$ is 0, the probability associated with each choice is 0.5. As $\beta$ tends to infinity, the rule converges to the myopic best reply rule. 
+%\parencite{belloc2013}
+
+In this model knowing the share of the population opting for B, $x_B\equiv x$, is enough to know the state of the system in a given period.
+As one choice is always intrinsically better than the other, the difference in utility between the two alternatives, using Equations \ref{eq1} and \ref{eq2}, is:
+
+\begin{equation}
+\Delta u_{t}= \lambda^{A}+\rho (1- x_{t-1})- \lambda^{B}-\rho x_{t-1} =\lambda+\rho(1- 2x_{t-1})
+\end{equation}
+
+In case of synchronous updating (i.e. all agents simultaneously update their choices), the share of the population opting for B, at $t$ is
+
+\begin{equation}
+\label{equ:Map}
+x_t=\frac{1}{1+ e^{{\beta} [ \lambda+\rho(1-2x_{t-1})]}}=f(x_{t-1})
+\end{equation}
+
+Given this map it has been shown that when $\beta \rightarrow 0$, there is a unique and stable equilibrium. When instead  $\beta \rightarrow \infty$, three cases can occur. If $\lambda<-\rho$, $x=1$ is the unique and stable steady state. If $\lambda>\rho$, $x=0$ is the unique and stable steady state, whereas $-\rho<\lambda<\rho$ implies that $x=\frac{\lambda+\rho}{2\rho}$ is unstable, while $x=0$ and $x=1$ are stable.
+The intuition behind these results is the following. 
+In case the intensity of choice parameter is high ($\beta \rightarrow \infty$) and the utility differential between the choices is greater (lower) than the returns to conformity, the entire population possibly abandons (sticks to) the \textit{status quo}. Contrarily, if $ -\rho<\lambda<\rho$ multiple equilibria are possible. It was found that the bifurcation occurs for values of $\beta$ approximately equal to 3.5.
+
+\bigskip
+\color{red} We can add risk aversion into this as an exogenous parameter or endogenous one by arguing that people that have changed career in the past are less risk averse and are more likely to apply to newly appeared vacancies. For instance we can argue that in certain circumstances, revision opportunities (i.e the probability of considering whether to apply to a job) are allocated according to specific, non-random, behavioral rule. For this reason, we allow for an arbitrary specification of the revision opportunities based risk aversion. 
+We define $q_i, t$ as the probability that exactly player $i$ looks into a revision opportunity in $t$ (monitors the job openings). This probability is proportional to the agent's risk tolerance i.e. $q_i=\frac{s_{i,t}}{\sum_{j=1}^{N} s_{j,t}}$.
+This implies that the agent who is more risk seeker relative to the entire population is more likely to be given the chance to re-consider his job. 
+
+Once the decision on whether to switch to the alternative option or stick to the previously selected job is made, the agent's risk aversion is revised. we  consider that risk aversion never takes negative values. Moreover, risk tolerance varies endogenously as a result of an experience-based learning process. It increases, if previously undertaken actions result into the outcomes one expects. If instead actions generate unwanted consequences, risk tolerance decreases. Thus, self-efficacy levels change in line with the changes in individual utility. 
+To formalise these conditions, we chose the following functional form to model self-efficacy dynamics
+
+\begin{equation}
+    \tilde{s}_{i,t} ={s_{i, t-1} \cdot e^{\alpha(u_{i,t}-u_{i,t-1})}}
+\end{equation}
+
+\begin{equation}
+    s_{i,t} =\frac{\tilde{s}_{i,t}}{\sum_{j=1\neq i}^{N}s_{j, t}+\tilde{s}_{i,t}}
+\label{equ:riskdyn}
+\end{equation} 
+
+The parameter $\alpha$ is the key parameter of this model.
+It indicates the intensity of the revision process. When $\alpha > 0$, previous successes and failures become relevant and risk tolerance changes accordingly. Some agents are thus more likely than others to update their choices. 
+
+Conversely, in case $\alpha=0$, we are back to randomly assigned revision opportunities. Past successes or failures are not taken into account, risk tolerance does not vary over time and thus everybody is equally likely to revise his or her state.
+
+
+\textbf{Risk aversion}
+
+Ideally, in addition to incorporating this dynamic impatience factor, incorporating dynamic risk aversion as outlined by Stefi below would be useful. As Stefi mentions below, in the case of risk aversion this could be a function of the number of occupations held or job changes in a worker's history. We would need to arrive at a theory of how (and whether both) risk aversion and impatience are updated with experience. Risk aversion as incorporated above implies that the slope of a worker's utility function is steeper as $k$ rises. A worker $w$ with risk aversion factor $k_{1}$ will be more risk averse than another with $k_{2}$.
+
+\begin{table}
+    \begin{tabular}{cc|c|c|}
+     ~ & \multicolumn{1}{c}{} & \multicolumn{1}{c}{\$}  & \multicolumn{1}{c}{\$\$\$} \\\cline{3-4}
+     ~ & Near & Risk averse preference & Best \\\cline{3-4}
+      & Far & Worst & Risk taker preference \\\cline{3-4}
+    \end{tabular}
+\end{table}
+
+
+\color{red} Questions on risk aversion: 
+\begin{itemize}
+    \item Below we go into Stefi's suggested updating of risk aversion with experience. Questions:
+    \begin{itemize}
+        \item Seeing as we have both impatience and risk aversion updating with time I imagine it would be difficult to tease out their individual effects? 
+        \item Are we aiming to incorporate risk aversion in order to take a look at the influence of average risk aversion in a population? 
+        \item or something akin to the paper \href{https://docs.iza.org/dp16577.pdf}{(link)} shared by Stefi where we would associate different levels of risk aversion (or forms of updating) with different demographic groups? For example, some identified individual determinants of risk aversion to consider:
+        \begin{itemize}
+            \item Gender \parencite{boninCrosssectionalEarningsRisk2007, kiesslingGenderDifferencesWage2024}
+            \item Age
+            \item Skills \parencite{heckmanEffectsCognitiveNoncognitive2006}
+            \item Income
+            \item Dependent children (?)
+            \item Employment history (how many occupations held/changed)
+            \item Migration history (has previously moved)
+        \end{itemize}
+    \end{itemize}
+\end{itemize} \color{black}
+
+\color{red}
+\begin{align}
+    \tilde{r}_{w,i,t}={r_{w,i, t-1} \cdot e^{\alpha(u_{w,i,t}-u_{w,i,t-1})}}
+\end{align}
+
+\begin{align}
+    \tilde{r}_{i,t}={r_{i, t-1} \cdot e^{\alpha(u_{i,t}-u_{i,t-1})}}
+\end{align}
+
+\begin{align}
+    r_{i,t}=\frac{\tilde{r}_{i,t}}{\sum_{j=1\neq i}^{N}r_{j, t}+\tilde{r}_{i,t}}
+\end{align}
+
+\color{black}
+
+% \subsection{Data}
+% Data requirements of the current model structure.
+
+% \begin{center}
+% \begin{tabular}{| c | c | c | c |}
+% \hline
+%  Attribute & Data/definition requirement (scale) & Possible proxy \\ 
+%  \hline\hline
+%  Skills differential & Skills measure (occ) & Occupational transition prob. \\ 
+%  Employment & Employment (occ, geo) & Emp (occ) \\
+%  Unemployment & Unemployment (occ, geo)  & Unemp/Unemp Rates (occ) \\
+%  Vacancies & Vacancies (occ, geo) & Vacancy rates (occ) \\
+%  Wages & Wages (occ, geo) & Wages (occ) \\    
+%  Impatience & LTUE and Discouraged definitions & ~ \\ 
+%  Risk aversion & National or demographic averages & Worker history \\ 
+% \hline
+% \hline
+% \end{tabular}
+% \end{center}
+
+
+\subsection{Skills}
+\color{red}  Stefi: We should also add something related to skills (required by new job and current skills developed). 
+\color{black}
+
+\subsection{Match Quality}
+\color{purple} Stefi made a point about match quality, ie. just because someone gets a job does not necessarily mean it was a perfect match, either for their skills or their preferences. This is potentially something we could measure via our agents by tracking at least the wage differential between the acquired vacancy and their former job or the skills mismatch if we incorporate an additional element looking at skills similarity. \color{black}
+
+\subsection{Structural Transformation and Unemployment}
+\color{purple} Broader discussion of the relationship between structural transformation and unemployment to potentially be included in the introduction. \color{black}

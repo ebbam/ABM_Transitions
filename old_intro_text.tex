@@ -1,0 +1,70 @@
+%Job search is a dynamic process of learning and adaptation: workers update beliefs about their job‑finding chances in response to signals and setbacks, adjust reservation wages and application breadth, and react to rejection or uncertainty (discouragement, loss aversion) via their expended search effort \parencite{gonzalezEquilibriumTheoryLearning2010, muellerJobSeekersPerceptions2021, spinnewijnUnemployedOptimisticOptimal2015, caliendoLocusControlJob2015, caliendoLocusControlInternal2019, mcgeeSearchEffortLocus2016, liuSelfregulationJobSearch2014}. Furthermore, small differences in learning speed, anchoring to past wages, or affective responses compound over time, generating large gaps in exit times across seekers \parencite{adams-prasslPerceivedReturnsJob2023, cortesGenderDifferencesJob2023, schnitzleinLocusControlLowwage2016, kruegerJobSearchEmotional2011, lopez-kidwellWhatMattersWhen2013, burdettDecliningReservationWages1988}.
+
+%Despite extensive empirical evidence on the role of heterogeneity in job-seeker idiosyncracies and motivation, search-and-matching models typically reduce worker behavior to a set of heuristics with little dynamism. This omission is consequential: empirical work documents duration dependence in callbacks and exits \color{red}CITE\color{black}, systematic belief biases and slow learning among jobseekers \parencite{muellerJobSeekersPerceptions2021}, variable search effort \parencite{fabermanIntensityJobSearch2019, wanbergJobSearchGrind2010, lopez-kidwellWhatMattersWhen2013}, reservation‑wage dynamics linked to income losses \parencite{jacobsonEarningsLossesDisplaced1993}, and substantial job‑to‑job flows \parencite{eeckhoutUnemploymentCycles2019}. Neglecting these behavioral margins limits the ability of these models to reproduce various labor market regularities including long-term unemployment distributions and wage disparities. 
+
+%Greater matching frictions imply a longer unemployment spell in which an individual has time and space to adapt their search strategies and learn about the state of the labor market. Such adaptation and learning affect unemployment exit rates in ways that both favor unemployment rate recovery but also harm re-employment prospects of workers themselves \parencite{mukoyamaJobSearchBehavior2018, kudlyakSystematicJobSearch2013}. 
+
+
+%%%%%%%%%%%%
+%OLD
+%%%%%%%%%%%%
+%\textbf{Structural transformation, business cycles, and other forces of economic change are often accompanied by heterogeneous labor market frictions.} Consider the fate of individuals whose jobs face redundancy as a result of green industrial policy, rural communities reliant on economically non-diverse local labor markets, or the canonical example of how men and women navigate the labor market differently \textcolor{red}{Source needed}. As such, insulating people and places against adverse forces of economic change, whether they be structural, cyclical, or temporary in nature, has been and remains a considerable policy challenge for public and private institutions worldwide. 
+
+% \textcolor{red}{Incorporate sources from Literature Review.}. Thus, these models are exceptionally well-suited to analyse the inherently cross-discipline, cross-policy, and otherwise \emph{cross-cutting} nature of socio-economic transformation. 
+
+%\textbf{However, thus far, agent-based labor market models have neglected the role of behavior in job search processes despite their role in determining heterogeneous outcomes across geographies and demographics \parencite{neugartAgentbasedModelsLabor2012}.} This oversight has persisted despite the fact that (1) agent-based models allow for a departure from typical “rational agent” paradigms in more conventional labor market models through the definition of agent-specific behavioral rules; (2) worker behavior at the individual or community level \emph{produce} the macro-level dynamics of interest to policy-makers; and (3) the field of behavioral labor economics provides a wealth of theoretical, experimental, and empirical evidence as to the behavioral biases that motivate heterogeneous job search strategies. 
+
+%\textbf{As such, this work outlines a suggested theoretical and methodological basis for incorporating behavioral heterogeneity through a parsimonious set of rules into an agent-based labor market model in which we allow worker attributes and experience to influence their search effort and wage expectations.} To our knowledge, this work represents the first behaviorally micro-founded agent-based labor market model. We apply this work to data from the US labor market, emphasizing the significant potential for replication across other national or regional contexts. A key contribution of this work is a commitment to deriving behavioral rules from micro data rather than theory alone.
+
+%\textbf{We contribute to \textcolor{red}{X} relevant streams of literature within both labor and behavioral labor economics}. First, we employ micro data to incorporate insights from the wealth of literature on the influence of unemployment duration on search effort and wage expectations. Second, we marry considerations of both the macro and micro level determinants of labor market matching by incorporating macro and micro- level data. This includes a central consideration of the role of the business cycle in determining occupational labor demand. Third, we make a first attempt at establishing a set of parsimonious behavioral rules in an agent-based labor market model. An important yet often underexplored benefit of working with agent-based models is precisely the ability to incorporate more realistic behavioral rules into economic agents that transcend the ``rational agent'' paradigm. This freedom naturally comes with the important responsibility on the modeller to ensure such behavioral rules are meticulously chosen, informed by data, and free of researcher bias. Therefore, we aim to demonstrate, wherever relevant, any non-data-driven (either due to a lack of data or purely theory-based justifications) decisions and suggestions for alternative approaches that merit testing as foils to the following approach.
+
+% \paragraph{Mistake rate} Within this application set, individuals apply to a random vacancy with probability $\theta$ to align with the reality that observed occupational transitions occasionally fall outside of the empirically derived transition probabilities. In other words, the probability of transitioning from a receptionist to executive or vice versa, is not in reality equal to zero whereas the observed occupational transitions that inform the values of $\rho_{ij}$ in this model often do not account for them. 
+
+% After a failure ($h_{i,t-1}=0$), $\beta_{b,t}$ falls via \eqref{eq:belief}, so $p_{ij,t}$ falls proportionally across targeted vacancies and the minimal application count $|A_t^i|$ required by \eqref{eq:target} rises, shifting portfolios toward higher-fit $m_{ij}$. (iii)
+
+% \paragraph{Per-period success probability from \(A\) applications.}
+% Given a chosen \(A\) the worker's perceived probability of obtaining at least one offer in period \(t\) is
+% \begin{equation}\label{eq:P_of_A}
+% \mathbb P_t(\text{offer} \mid A)
+% \;=\;
+% 1-\prod_{a=1}^{A} (1-p_{a,t}).
+% \end{equation}
+
+% Suppose that submitting one job application incurs a fixed cost $c>0$, and that each application succeeds independently with subjective probability $p_{ij,t}=m_{ij}\beta_{b,t}$, where $\beta_{b,t}$ evolves according to the belief‐updating rule in \ref{eq:belief}. Let $EU$ denote the expected value of obtaining employment.
+
+% If the worker submits $A_t$ applications in month $t$, the probability of at least one success is
+% \[
+% 1- \prod_{v\in A_t^i}\big(1-p_{ij,t}\big)\;=\; 1-(1-p_{ij,t})^{A_t},
+% \]
+% so that the expected payoff in the latest month is:
+% \begin{equation}
+% \label{eq:exp_payoff}
+% EU_t(A_t) 
+% \;=\;
+% EU\big[1-(1-p_{ij,t})^{A_t}\big]
+% - cA_t,
+% \qquad A_t\in\{0,1,\ldots,\bar A\}.
+% \end{equation}
+
+% The worker will continue to apply as long as the expected marginal benefit of one additional application exceeds the cost.  Intuitively, the job-seeker applies to successively lower-ranked vacancies until the expected return from one more application falls below the fixed cost~$c$.
+% \begin{equation}
+% \label{eq:mb}
+% \Delta(A_t;p_{ij,t})
+% \;=\;
+% V\big[\Pi(A_t;p_{ij,t})-\Pi(A_t-1;p_{ij,t})\big]
+% \;=\;
+% V\,p_{ij,t}\,(1-p_{ij,t})^{A_t-1}.
+% \end{equation}
+% The optimal number of applications therefore satisfies
+% \begin{equation}
+% \label{eq:discrete_rule}
+% A_t^{\star}
+% \;=\;
+% \max\Big\{
+% A\in\{0,1,\ldots,\bar A\}
+% :\;
+% V\,p_{ij,t}\,(1-p_{ij,t})^{A-1}\ge c
+% \Big\}.
+% \end{equation}
+
+% When subjective job-finding beliefs $\beta_{b,t}$ decline over time (i.e.\ $p_{ij,t}$ falls), the threshold condition in \eqref{eq:discrete_rule} will eventually fail, leading the worker to reduce applications and possibly stop searching altogether.

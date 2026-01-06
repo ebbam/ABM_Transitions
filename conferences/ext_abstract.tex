@@ -1,0 +1,72 @@
+\documentclass[hidelinks]{article}
+\usepackage[a4paper, margin = 1in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{blindtext}
+\usepackage{authblk}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{doi}
+\usepackage[skip=2pt]{caption}
+\usepackage[style = nature]{biblatex} 
+\usepackage{import}
+\usepackage[normalem]{ulem}
+\addbibresource{em_si_mdrc.bib}
+
+\providecommand{\keywords}[1]
+{
+  \small	
+  \textbf{\textit{Keywords---}} #1
+}
+
+
+\title{Labour market frictions in net-zero transformations \\[1ex] \large Incorporating behavioural heterogeneity into a data-driven network model}
+\author[1,2]{Ebba Mark}
+\author[3,4]{Maria del Rio-Chanona}
+\author[1,2]{Stefania Innocenti}
+
+
+\affil[1]{\small \emph{Institute for New Economic Thinking, Oxford Martin School, University of Oxford}}
+\affil[2]{\small \emph{Smith School of Enterprise and the Environment, University of Oxford}}
+\affil[3]{\small \emph{Bennett Institute for Public Policy, University of Cambridge}}
+\affil[4]{\small \emph{University College London\vspace{-2em}}}
+
+\date{}
+
+\setlength{\voffset}{-0.5in}
+\begin{document}
+\setlength\parskip{1em plus 0.1em minus 0.2em}
+
+\maketitle
+\begin{abstract}
+ The scale of transformation required of rapid and sufficient decarbonisation in fossil fuel-producing economies is likely to be disruptive to the social and economic lives of their populations. On the economic side, the labour market frictions resulting from decarbonisation or net-zero industrial transformation have received considerable attention. These frictions are likely to be spatially, occupationally, and demographically heterogeneous raising the potential for groups of people to become left behind in these transitions. In this context, implementing cost efficient policies able to alleviate these effects has become a key priority. Agent-based modelling has emerged as a useful tool for understanding the dynamics of labour market adjustment to macro-level shocks, including reductions in demand for fossil fuel workers. Contributing to the potential of these tools to aid policymaking, this work builds on a leading data-driven network model of worker transitions by incorporating critical behavioural micro foundations into the agent decision-making underlying the model's functionality. The search efforts and processes of unemployed or laid-off workers do not happen in a vacuum but are centrally influenced by behavioural attributes like impatience and their attitudes towards risk as well as their wage, skills, and location preferences. This methodological contribution allows for greater simulation fidelity in future analyses of  the heterogeneous societal and economic effects of a net-zero transition on people and places.
+\end{abstract}
+
+
+\keywords{\emph{agent-based models, climate policy, behavioural economics}}
+
+Transitioning from an emissions-intensive economy to a net-zero one will be accompanied by spatially, occupationally, and demographically heterogeneous labour market frictions. Such frictions not only have consequences for people’s lives and livelihoods but could, if unmanaged, contribute to public opposition to stringent climate policy when it is most urgently needed. However, ensuring the cost efficiency of policy implemented to alleviate these adverse labour market consequences of a net-zero transition on people and communities requires knowledge of where and for whom these frictions will be most disruptive. 
+
+Agent-based modelling has emerged as a useful tool allowing policymakers to better simulate the effects of a net-zero transformation on the labour market as well as the policy required to ensure a just transition for workers. One such tool is a data-driven network model constructed by del Rio-Chanona et al. \cite{delrio-chanonaOccupationalMobilityAutomation2021}. The model's original application examined the potential impact of automation on the US labour market by simulating the job searches of laid-off or otherwise unemployed workers following a contraction in demand in particular occupations at high risk of automation. Since this original project, various methodological modifications including the incorporation of the role of geography and a coupling to input-output data have been made in applications to labour markets in the US and Brazil.
+
+However, despite their central role in job search processes, preferences and behavioural attributes of workers have yet to be incorporated into the model’s core functionality. Crucially, both worker preferences \cite{nayaDesigningLaborMarket2021} for wage, location \cite{limLocationMajorBarrier2023}, and skill similarity \cite{schoenbergHowGeneralSpecific2006, goosMarketsJobsTheir2019, dawsonSkilldrivenRecommendationsJob2021, neffkeSkillMismatchCosts2022, soaresmartinsnetoForcedDisplacementOccupational2023} as well as behavioural attributes of risk aversion and impatience \cite{simoesIndividualDeterminantsSelfEmployment2016} have proven to be core influences in job searches and transitions.  Furthermore, the effect of these preferences interact strongly with individual characteristics such as income level \cite{boninCrosssectionalEarningsRisk2007}, skills or cognitive ability \cite{heckmanEffectsCognitiveNoncognitive2006}, and gender \cite{erikssonLaborMarketConsequences2012, mcgeeGenderDifferencesReservation2023}. As a result, these behavioural attributes are hypothesized to have an outsized, if not explanatory, influence on stylized labour market inefficiencies like the gender wage gap, long-term unemployment, and urban-rural divides in prosperity \cite{cortesGenderDifferencesJob2023, limLocationMajorBarrier2023, spinnewijnUnemployedOptimisticOptimal2015}. Therefore, the use of agent-based labour market models to understand the effect of structural transformation on people and places warrants the inclusion of these dimensions of human behaviour.
+
+Thus, this work makes this precise methodological adjustment to ensure greater simulation fidelity in future applications of this model to policy analysis. More specifically, this work incorporates five critical behavioural micro foundations across two categories.
+
+\begin{center}
+\textbf{\underline{Preference heterogeneity}} \\
+\end{center}
+\par
+Fundamentally, job search-and-matching is dictated by worker preferences for vacancies and employer preferences for workers \cite{wanbergJobSeekingProcess2020}. This work thus expands on the worker side of this dynamic by incorporating three key worker preferences: skills, wage, and location.
+
+\begin{center}
+\textbf{\underline{Behavioural heterogeneity}} \\
+\end{center}
+\par
+Typically, labour economics research on job search has utilised matching functions that match workers to open vacancies, calibrated on aggregate level employment statistics \parencite{mortensenMatchingProcessNoncooperative1982, pissaridesShortRunEquilibriumDynamics1985}. However, such functions assume that labour markets clear, or at least sufficiently clear to an equilibrium unemployment rate. However, such matching functions rarely consider heterogeneity of psychological attributes or behaviours that define workers' search for and evaluation of available job opportunities. Evidence of the lack of full validity of matching functions can be found in the "inefficient" outcomes of real-world labour markets such as gender wage gaps, long-term unemployment, and discouraged worker effects. Therefore, the most novel contribution of this work is in incorporating behavioural heterogeneity into the job search process of agents via two mechanisms: the urgency with which unemployed workers search for jobs (impatience) and the extent to which they aim to maximise across their preferences through decisions of which vacancies to target (risk aversion) \parencite{dohmenBehavioralLaborEconomics2014}.  
+
+These model design choices bring this important policy-making tool to understand the effects of large-scale transformation on people and places closer to the lived and behavioural reality of workers. This contribution ensures that future applications of this network model will make more informed conclusions about the emergence of isolated or left behind (geographic, demographic, occupational) groups in a changing world of work. In conclusion, this work makes a key methodological contribution to a leading agent-based labour market model via the incorporation of behavioural micro foundations into worker transitions and search processes. Ultimately, our objective is to allow for a better assessment of the heterogeneous effects that the net-zero transition is likely to exert on people and places.
+
+\printbibliography
+
+\end{document}

@@ -1,0 +1,659 @@
+
+\section{Theoretical Model}
+
+\subsection{Environment}
+
+Time is discrete, indexed by $t=0,1,2,\dots$. The labour market comprises a finite set of occupations $\mathcal{I}=\{1,\dots,N\}$. The occupational structure is represented by a network with adjacency matrix $\mathbf{A}=[\rho_{ij}]_{N\times N}$, where $\rho_{ij}\in[0,1]$ represents the skill similarity (or transition probability) between occupations $i$ and $j$. The diagonal elements represent within-occupation transitions, and rows are normalized: $\sum_{j=1}^N \rho_{ij}=1$ for all $i$.
+
+At each period $t$, the economy comprises:
+\begin{itemize}
+    \item Unemployed workers: $U_{it}$ in occupation $i$, with aggregate $U_t = \sum_{i=1}^N U_{it}$
+    \item Employed workers: $E_{it}$ in occupation $i$, with aggregate $E_t = \sum_{i=1}^N E_{it}$
+    \item Vacancies: $V_{it}$ in occupation $i$, with aggregate $V_t = \sum_{i=1}^N V_{it}$
+\end{itemize}
+
+Labour market tightness is defined as:
+\begin{equation}
+\varphi_t = \frac{V_t}{U_t}
+\end{equation}
+
+Occupation-specific competition (congestion) is:
+\begin{equation}
+\xi_{it} = \frac{U_{it}^{\text{eff}}}{V_{it}}
+\end{equation}
+where $U_{it}^{\text{eff}} = \sum_{j:\rho_{ji}>0} U_{jt}$ represents the effective unemployment pool competing for vacancies in occupation $i$ (from all connected occupations).
+
+\subsection{Workers}
+
+Each worker is characterized by:
+\begin{itemize}
+    \item Origin occupation $i \in \mathcal{I}$
+    \item Employment status $s \in \{E, U\}$ (employed or unemployed)
+    \item Current/previous wage $w$
+    \item Unemployment duration $\tau$ (if unemployed)
+    \item Age $a$
+    \item Risk aversion parameter $\lambda \geq 0$
+    \item Gender (affects risk aversion distribution)
+\end{itemize}
+
+\subsection{Labor Demand}
+
+\subsubsection{Target Demand and Business Cycles}
+
+Each occupation $i$ has a baseline target demand:
+\begin{equation}
+D_i^* = E_i^* + V_i^*
+\end{equation}
+
+This target is subject to occupation-specific shocks $z_{it}$ representing business cycle fluctuations or structural changes:
+\begin{equation}
+D_{it} = z_{it} \cdot D_i^*
+\end{equation}
+
+where $z_{it}$ follows an exogenous stochastic process (e.g., calibrated to occupation-level value-added data).
+
+\subsubsection{Separations}
+
+Employment in occupation $i$ evolves through separations. The separation probability combines exogenous and endogenous components:
+\begin{equation}
+\label{eq:separation}
+s_{it} = \delta + (1-\delta) \cdot \frac{\gamma \cdot \max\{0, E_{it} - D_{it}\}}{E_{it} + 1}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $\delta \in (0,1)$ is the baseline (exogenous) separation rate
+    \item $\gamma > 0$ governs the sensitivity of endogenous separations to excess employment
+    \item The endogenous component captures layoffs when employment exceeds demand
+\end{itemize}
+
+The number of workers separated in period $t$ is:
+\begin{equation}
+S_{it} \sim \text{Binomial}(E_{it}, s_{it})
+\end{equation}
+
+Separated workers move from employed to unemployed status in their current occupation.
+
+\subsubsection{Vacancy Creation}
+
+Firms in occupation $i$ post vacancies to close the gap between current employment and target demand, subject to matching frictions. The vacancy posting probability is:
+\begin{equation}
+\label{eq:vacancy_prob}
+p_{it}^V = \max\left\{0, v_t^* - \frac{V_{it}}{D_i^* + 1}\right\}
+\end{equation}
+
+where $v_t^*$ is the target vacancy rate (e.g., calibrated to JOLTS data). The number of new vacancies posted is:
+\begin{equation}
+V_{it}^{\text{new}} \sim \text{Binomial}(D_i^*, p_{it}^V)
+\end{equation}
+
+Vacancies that remain unfilled for $\bar{\tau}^V$ periods (e.g., 6 months) are withdrawn from the market.
+
+\subsubsection{Entry and Exit}
+
+Workers retire at age $\bar{a}$ (e.g., 65). New workers enter the labor market in entry-level occupations $\mathcal{I}^{\text{entry}} \subset \mathcal{I}$. The number of entrants to occupation $i$ in period $t$ is:
+\begin{equation}
+N_{it}^{\text{entry}} = \frac{D_i^*}{\sum_{j \in \mathcal{I}^{\text{entry}}} D_j^*} \cdot R_t
+\end{equation}
+
+where $R_t$ is the total number of retirees in period $t$, ensuring a balanced labor force.
+
+\subsection{Unemployed Worker Search and Application}
+
+\subsubsection{Information Structure}
+
+An unemployed worker in occupation $i$ observes a sample of vacancies from the network neighborhood. The worker samples up to $\bar{V}$ vacancies (e.g., $\bar{V}=30$) with sampling probabilities proportional to network weights $\rho_{ij}$:
+\begin{equation}
+\mathbb{P}(\text{sample vacancy in occupation } j) = \rho_{ij}
+\end{equation}
+
+Additionally, with probability $\mu$ (e.g., $\mu=0.1$), a sampled vacancy is replaced by a uniformly random vacancy from the entire economy, representing misdirected search or information frictions.
+
+\subsubsection{Reservation Wage}
+
+An unemployed worker sets a reservation wage that declines with unemployment duration. Using data-driven estimates from CPS, the reservation wage is:
+\begin{equation}
+\label{eq:reservation_wage}
+R_{b,t} = w_b \cdot r(\tau_{b,t})
+\end{equation}
+
+where $w_b$ is the worker's previous wage and $r(\tau)$ is a declining function of unemployment duration $\tau$, satisfying:
+\begin{equation}
+r'(\tau) < 0, \quad \lim_{\tau \to \infty} r(\tau) = \underline{r} > 0
+\end{equation}
+
+The function $r(\tau)$ is calibrated to match empirical reservation wage patterns, for example:
+\begin{equation}
+r(\tau) = \max\{\underline{r}, r_0 - \psi \tau\}
+\end{equation}
+
+with $\psi > 0$ capturing the rate of decline and $\underline{r}$ as a lower bound.
+
+\subsubsection{Vacancy Ranking and Utility}
+
+Workers rank sampled vacancies by utility. For a worker with previous wage $w_i$ from occupation $i$ considering a vacancy in occupation $j$ with wage $w_j$, the base utility is:
+\begin{equation}
+\label{eq:utility}
+u_{ij}(w_j) = (w_j - w_i) \cdot \rho_{ij}
+\end{equation}
+
+This captures both the wage gain and the occupational fit (skill transferability).
+
+When reservation wages are binding, vacancies with $w_j < R_{b,t}$ receive a penalty rather than hard exclusion:
+\begin{equation}
+\label{eq:utility_penalty}
+\tilde{u}_{ij}(w_j) = \begin{cases}
+u_{ij}(w_j) & \text{if } w_j \geq R_{b,t} \\
+u_{ij}(w_j) \cdot \exp\left(-\kappa \frac{R_{b,t} - w_j}{R_{b,t}}\right) & \text{if } w_j < R_{b,t}
+\end{cases}
+\end{equation}
+
+where $\kappa > 0$ (e.g., $\kappa=3$) controls the severity of the penalty. This formulation allows workers to occasionally apply to below-reservation-wage jobs when search frictions are severe.
+
+\subsubsection{Application Decision}
+
+The number of applications sent increases with unemployment duration, reflecting both increasing search intensity and declining reservation wages. Let $a(\tau)$ denote the expected number of applications as a function of unemployment duration, calibrated from CPS data on job search intensity:
+\begin{equation}
+\mathbb{E}[A_{b,t} \mid \tau_{b,t}] = a(\tau_{b,t})
+\end{equation}
+
+This function is non-monotonic, initially increasing (desperation) then potentially decreasing (discouragement).
+
+Workers also exhibit risk aversion in their application strategy. Each worker has a risk-aversion parameter $\lambda_b$, which determines how many of the top-ranked vacancies to skip before applying (skipping very risky high-utility jobs):
+\begin{equation}
+A_{b,t} = \{\text{vacancies ranked } \lambda_b+1 \text{ through } \lambda_b + a(\tau_{b,t}) \text{ by utility}\}
+\end{equation}
+
+Risk aversion $\lambda_b$ follows a gender-specific distribution:
+\begin{equation}
+\lambda_b \sim \begin{cases}
+|\mathcal{N}(\mu_F, \sigma_F^2)| & \text{if female} \\
+|\mathcal{N}(\mu_M, \sigma_M^2)| & \text{if male}
+\end{cases}
+\end{equation}
+
+with $\mu_F < \mu_M$, reflecting empirical evidence that women exhibit higher risk aversion in job search.
+
+\subsection{Employed Worker Search}
+
+Employed workers engage in on-the-job (OTJ) search with probability that depends on age and local labor market competition:
+\begin{equation}
+\label{eq:otj_prob}
+p_{b,t}^{\text{OTJ}} = \frac{1}{1 + \exp\left[-(\alpha + \beta_A(a_b - \bar{a}) + \beta_C \xi_{it})\right]}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $a_b$ is the worker's age, $\bar{a}$ is reference age (e.g., 40)
+    \item $\beta_A < 0$ captures declining search propensity with age
+    \item $\beta_C < 0$ captures reduced search when competition is high (congestion)
+    \item $\xi_{it}$ is occupation-specific competition from equation (2)
+\end{itemize}
+
+Employed searchers sample vacancies identically to unemployed workers but apply a higher reservation wage:
+\begin{equation}
+R_{b,t}^{\text{OTJ}} = w_b \cdot (1 + \epsilon)
+\end{equation}
+
+where $\epsilon > 0$ (e.g., $\epsilon = 0.05$) ensures employed workers only apply to wage improvements.
+
+Employed workers send a fixed number of applications $\bar{A}^{\text{OTJ}}$ (e.g., 3-5) to vacancies satisfying the reservation wage constraint.
+
+\subsection{Matching and Hiring}
+
+\subsubsection{Application Assignment}
+
+After all workers submit applications, each vacancy $v$ accumulates an applicant pool $\mathcal{A}_v$. The composition of this pool depends on:
+\begin{itemize}
+    \item Network structure (which occupations are connected to vacancy's occupation)
+    \item Number of unemployed and employed searchers
+    \item Individual application decisions
+\end{itemize}
+
+\subsubsection{Hiring}
+
+Firms fill vacancies by randomly selecting from their applicant pool. For vacancy $v$:
+\begin{equation}
+\mathbb{P}(\text{worker } b \text{ hired} \mid b \in \mathcal{A}_v) = \frac{1}{|\mathcal{A}_v|}
+\end{equation}
+
+This captures the coordination friction that workers cannot perfectly direct applications and firms cannot perfectly rank applicants.
+
+Workers can only be hired once per period. After hiring:
+\begin{itemize}
+    \item The worker's occupation changes to the vacancy's occupation
+    \item The worker's wage changes to the vacancy's wage
+    \item For UE transitions, unemployment duration $\tau$ is recorded
+    \item The vacancy is removed from the market
+\end{itemize}
+
+\subsection{Wage Determination}
+
+Vacancy wages are drawn from occupation-specific distributions. For occupation $i$:
+\begin{equation}
+\log w \sim \mathcal{N}(\mu_i, \sigma_i^2)
+\end{equation}
+
+truncated to the interquartile range $[Q_1(w_i), Q_3(w_i)]$ to match empirical wage distributions while avoiding extreme outliers.
+
+Parameters $(\mu_i, \sigma_i)$ are calibrated to match OEWS (Occupational Employment and Wage Statistics) data for each occupation.
+
+\subsection{Law of Motion}
+
+The state of occupation $i$ at time $t$ evolves as:
+
+\paragraph{Employment:}
+\begin{align}
+E_{i,t+1} = E_{it} &- S_{it} && \text{(separations)} \nonumber \\
+               &- \sum_{j \neq i} H_{ij,t}^{EE} && \text{(EE moves to other occupations)} \nonumber \\
+               &+ \sum_{j \neq i} H_{ji,t}^{EE} && \text{(EE moves from other occupations)} \nonumber \\
+               &+ H_{ii,t}^{UE} && \text{(UE hires from own unemployment pool)} \nonumber \\
+               &+ \sum_{j \neq i} H_{ji,t}^{UE} && \text{(UE hires from other occupations)} \nonumber \\
+               &- R_{it} && \text{(retirements)} \nonumber \\
+               &+ N_{it}^{\text{entry}} && \text{(new entrants, if entry-level occ.)}
+\end{align}
+
+\paragraph{Unemployment:}
+\begin{align}
+U_{i,t+1} = U_{it} &+ S_{it} && \text{(new separations)} \nonumber \\
+               &- H_{ii,t}^{UE} && \text{(UE hires to own occupation)} \nonumber \\
+               &- \sum_{j \neq i} H_{ij,t}^{UE} && \text{(UE hires to other occupations)}
+\end{align}
+
+\paragraph{Vacancies:}
+\begin{align}
+V_{i,t+1} = V_{it} &+ V_{it}^{\text{new}} && \text{(new vacancies posted)} \nonumber \\
+               &- H_{ii,t} && \text{(filled vacancies)} \nonumber \\
+               &- V_{it}^{\text{expired}} && \text{(expired unfilled vacancies)}
+\end{align}
+
+where $H_{ij,t}^{UE}$ is the number of unemployed workers hired from occupation $i$ to occupation $j$, $H_{ij,t}^{EE}$ is employed-to-employed hires, and $H_{ii,t} = H_{ii,t}^{UE} + \sum_{j} H_{ji,t}^{EE}$ is total hires.
+
+\subsection{Equilibrium Definition}
+
+A \textbf{competitive search equilibrium} for this economy consists of sequences of:
+\begin{itemize}
+    \item Employment, unemployment, and vacancies $\{E_{it}, U_{it}, V_{it}\}_{i,t}$
+    \item Worker application decisions $\{A_{b,t}\}_b$
+    \item Firm vacancy posting decisions $\{V_{it}^{\text{new}}\}_{i,t}$
+    \item Wage distributions $\{F_{it}(w)\}_{i,t}$
+    \item Matches $\{H_{ij,t}^{UE}, H_{ij,t}^{EE}\}_{i,j,t}$
+\end{itemize}
+
+such that:
+\begin{enumerate}
+    \item Workers optimize application decisions given information structure (equations \ref{eq:reservation_wage}-\ref{eq:otj_prob})
+    \item Firms post vacancies to meet target demand (equation \ref{eq:vacancy_prob})
+    \item Separations follow equation \ref{eq:separation}
+    \item Wages are drawn from calibrated distributions matching OEWS data
+    \item Matching is random conditional on application pools
+    \item Labor force remains balanced through entry/exit
+    \item Network structure $\mathbf{A}$ is fixed (or evolves exogenously)
+\end{enumerate}
+
+\subsection{Key Predictions}
+
+This model generates several testable predictions:
+
+\begin{enumerate}
+    \item \textbf{Unemployment duration distribution:} Search intensity $a(\tau)$ and declining reservation wages $r(\tau)$ generate a right-skewed unemployment duration distribution matching CPS data.
+    
+    \item \textbf{Beveridge curve:} The negative relationship between unemployment and vacancies emerges from separation and vacancy posting rules responding to the same demand shocks $z_{it}$.
+    
+    \item \textbf{Occupational mobility patterns:} Network structure $\mathbf{A}$ determines transition probabilities. Dense connections between occupations $i,j$ (high $\rho_{ij}$) predict higher transition rates.
+    
+    \item \textbf{Wage changes at job transition:} EE transitions yield positive wage gains on average (reservation wage $R_{b,t}^{\text{OTJ}} > w_b$). UE transitions may yield losses after long unemployment spells (declining $r(\tau)$).
+    
+    \item \textbf{Competition effects:} Higher $\xi_{it}$ reduces employed search probability (equation \ref{eq:otj_prob}) and increases unemployment duration through congestion.
+    
+    \item \textbf{Business cycle dynamics:} Negative shocks $z_{it} < 1$ increase separations (equation \ref{eq:separation}) and reduce vacancy posting (equation \ref{eq:vacancy_prob}), generating pro-cyclical vacancy rates and counter-cyclical unemployment.
+\end{enumerate}
+
+\subsection{Relationship to Existing Literature}
+
+This model synthesizes several strands of the search and matching literature:
+
+\begin{itemize}
+    \item \textbf{Diamond-Mortensen-Pissarides framework:} We preserve the core DMP insight that frictions prevent immediate matching, but add occupational heterogeneity and network structure.
+    
+    \item \textbf{Directed search:} Workers observe and rank vacancies (equations \ref{eq:utility}-\ref{eq:utility_penalty}), but information is imperfect (limited sampling, misdirection probability $\mu$).
+    
+    \item \textbf{On-the-job search:} Following %\citet{burdett1998wage},
+    employed workers search, but we endogenize search intensity through competition and age (equation \ref{eq:otj_prob}).
+    
+    \item \textbf{Occupational mobility:} The network structure captures skill transferability and information flows, %related to \citet{neffke2013skill} and \citet{gathmann2010}.
+    
+    \item \textbf{Reservation wages:} Our data-driven declining reservation wage function $r(\tau)$ is consistent with search models with finite horizons or imperfect information about job-finding rates.
+\end{itemize}
+
+The main innovation is the integration of these elements in a tractable agent-based framework that can be calibrated to match rich micro-level patterns while generating macro-level labor market dynamics.
+
+
+% \paragraph{Vacancy ranking.}
+% Each relevant vacancy $v$ is ranked according to a transformation of the wage differential scaled by occupational similarity $\rho_{ij}\in[0,1]$
+% \begin{equation}
+% \label{eq:uw}
+% u_w \;=\; \rho_{ij}\,(w_j-w_i),
+% \end{equation}
+% which is then mapped through CRRA utility as outlined in \ref{eq:crra}. 
+
+% \paragraph{Per-vacancy success probability and belief updating.}
+
+% The perceived per-vacancy success probability $P_i(v)$ which evolve with concave learning (``sticky beliefs''):
+% \begin{align}
+% \quad & P_i(v)\;=\; m_{ij}\,\beta_{b,t}. \label{eq:mult}
+% \end{align}
+
+% \begin{align}
+% \quad & P_b(v)\;=\; m_{ij}\,\beta_{b,t}. \label{eq:mult}
+% \end{align}
+
+% \begin{equation}
+% \label{eq:belief}
+% \beta_{b,t}\;=\;\beta_{b,t-1} \;+\; \alpha_t\big(h_{b,t-1}-r_{b,t}\big),
+% \qquad
+% \alpha_t \;=\; 1 - e^{-\omega t},
+% \end{equation}
+% where $h_{b,t-1}=1$ if the previous application succeeded (and $0$ otherwise), $r_{b,t}$ is the benchmark (e.g., a reference/expected success - \textcolor{red}{This could be $\rho$ requiring that the individual has some awareness of fitness for a vacancy...might be an easier assumption than that they know the tightness of the labor market. Alternatively, we could make this the current matching probability to indicate some awareness by the individual of the state of the labor market?}), $\omega>0$ is a curvature parameter, and $\alpha_t$ delivers concave (saturating) learning.
+
+% This functional form for $\alpha$ implies diminishing sensitivity over time, consistent with concave learning in line with the findings of \cite{muellerJobSeekersPerceptions2021} who demonstrate that job seekers’ beliefs are sticky and adjust slowly downward over time.
+
+% \paragraph{Target-probability rule (applications/effort).}
+% Let $p_{ijt}$ denote the per-vacancy success probability from \eqref{eq:mult}.
+
+% The worker chooses the \emph{smallest} top-$k$ set $A_t^i$ (ordered by the ranking in \eqref{eq:crra}) such that
+% \begin{equation}
+% \label{eq:target}
+% 1-\prod_{v\in A_t^i}\big(1-p_{ij,t}\big)\;\ge\;1-\varepsilon,
+% \qquad
+% |A_t^i|\le \bar A,
+% \end{equation}
+% where $\varepsilon\in(0,1)$ is the tolerated failure probability and maximum total search cost $\bar A$ such that $A^i_t \leq \bar A$.
+
+% \textcolor{violet}{I think this might be going in the right direction. however here is what I woudl do: 1) can weassume that lower ranked applications are worse? if so, effective success for the 
+% k-th best vacancy should decline geometrically i.e \begin{align}
+% p_{i(k),t} &= p_{i1,t}\,\exp\!\big[-\gamma\,(k-1)\big], \qquad \gamma>0,\\
+% p_{i1,t}  &= \beta_{b,t}\,\pi_{i,t}\,\rho_{i(1)}^{\eta}.
+% \end{align}. 
+
+% We can elaborate this in an expected utility framework by defining a match probability  $m_{ijt}$, as follows:
+
+% \[
+% EU_{bt}= \sum^{k}_{j = 0} m_{ijt}
+% \begin{cases}
+% \dfrac{(\rho_{ij}w)^{1-\lambda_b}}{1-\lambda_b}, & \lambda_b\neq 1,\\[0.35em]
+% \ln (\rho_{ij}w), & \lambda_b=1.
+% \end{cases}
+% \]
+
+
+% \begin{equation}\label{eq:pa_general}
+% p_{a,t} \;=\; \varphi_{it}\,\beta_{b,t}\, f(a).
+% \end{equation}
+
+% \textcolor{violet}{I think we still get the behavior right if we use a linearly declining probability ranking because our beliefs are geometrically declining?}:
+% \begin{itemize}
+%   \item \emph{Geometric/exponential decline:} \(f(a)=\exp\big(-\gamma (a-1)\big)\), so
+%     \[
+%       p_{a,t}=p_{1,t}\,e^{-\gamma (a-1)},\qquad p_{1,t}:=m_{ij}\beta_{b,t}.
+%     \]
+% \begin{equation}
+%     f(a)=\max\{1-\gamma (a-1),\,0\} 
+% \end{equation}
+
+% \textcolor{red}{Question for Stefi: I think \autoref{eq:new_p_1_t} is more consistent with the formulation above than \autoref{eq:original_p_1_t}. It is a reflection of match likelihood due to competition, whereas rho factors into the actual utility derivation. Does this make more sense now>? TO ME if we want m to capture match likelihood via tightness/competition, and 
+% $\rho$ captures match quality via utility, then \autoref{eq:new_p_1_t} is more correct and then keep $\rho$
+% inside the payoff term 
+% $ub(w,\rho)$, not inside the probability. $\varphi_{i,t}$ is not a probability  (can exceed 1), so using it directly in p_{1,t} is structurally awkward unless you transform it into $[0,1]$}
+% \subsubsection*{Bringing Macro and Micro Together...}
+
+% ...This is where we need to relate labor demand to the micro actions...
+
+% \begin{equation}
+% \label{eq:A_employed}
+% A_t^i \;=\; \big\{\, v\in V_t^i \;:\; \mathbb E[U_{i,t}(v)] \;\ge\; \bar U_i \,\big\},
+% \end{equation}
+
+% where $\bar U_i$ is the worker’s acceptance threshold equivalent to their current wage \textcolor{red}{or $u_i(w_i)$}  and  $ E[U_{i,t}(v)] = m_{ij}\,u_i(w_j)$. The same target-probability rule \eqref{eq:target} can be applied with the per-vacancy success probability $P_i(v)$ as in \eqref{eq:mult}.
+
+% Individuals are subject to a maximum total search cost $\bar A$ such that $A^i_t \leq \bar A$. 
+
+
+% \section*{Additional Considerations}
+
+% \subsection*{Note: Occupational Similarity vs. Probability of Hiring}
+% \textcolor{violet}{In the below, we outline the possibility for incorporating both occupational similarity and matching probability defined as labor market tightness into expected utility of a job application. }
+
+% We can combine the similarity and probability that worker $i$ successfully matches with vacancy $j$ to reflect that similarity makes a match both \textbf{more likely} and \textbf{more desirable}.
+
+% We assume that job seekers evaluate potential vacancies using an expected utility framework, consistent with VNM utility theory. 
+
+% Let $i$ index workers and $j$ index job vacancies. Each worker faces a set of potential vacancies as a function of dynamic search effort, each associated with a wage offer $w_{ij}$ and a probability $m_{ij}$ of successful matching or job attainment.
+
+% The utility of wage $w_{ij}$ is modeled using a CRRA (constant relative risk aversion) utility function as in Equation \ref{eq:EU_function_theoretical} where $\gamma_i > 0$.
+
+% To account for both the uncertainty of successful matches and the quality/relevance of each match, we define the expected utility of vacancy $j$ for worker $i$ as:
+
+% \begin{equation}
+% EU_{ij} = m_{ij} \cdot \rho_{ij} \cdot u(w_{ij})
+% \end{equation}
+
+% where:
+
+% \begin{itemize}
+
+% \item $m_{ij}$ is the probability that worker $i$ successfully matches with vacancy $j$ \textcolor{red}{which could reasonably depend on overall or occupation-specific labor market tightness $\varphi_t$. In the case in which we make this occupation-specific, we could consider modelling $m_{ij}$ as a function of overall applicants to the vacancy somehow? Essentially, taking into account the competition for that vacancy?}, 
+
+% \item $\rho_{ij} \in [0, 1]$ is a similarity index capturing the occupational proximity or compatibility between worker $i$ and vacancy $j$,
+
+% \item $u(w_{ij})$ is the utility derived from the wage offer.
+
+% \end{itemize}
+
+% The similarity index $\rho_{ij}$ modifies the utility by adjusting for match quality: a higher $\rho_{ij}$ implies a better match and thus greater value derived from the job. In some specifications, $\rho_{ij}$ may also enter into the determination of $m_{ij}$, as more similar matches may be more likely to succeed.
+
+% The worker then evaluates job opportunities by comparing $EU_{ij}$ across all available $j$. This version formalizes the idea that both \emph{uncertainty }via $m$ and \emph{match quality} via $\rho$ contribute to how the worker perceives the value of a job offer, while remaining grounded in VNM expected utility theory.
+
+% \textcolor{red}{To be updated...}
+
+% \begin{table}[h!]
+% \centering
+% \begin{tabular}{|l|l|l|}
+% \hline
+% \textbf{Symbol} & \textbf{Description} & \textbf{Data...} \\
+% \hline
+% $\mathcal{I}$ & Set of occupations & \\
+% $\mathcal{E}_{t}$ & Set of employed agents at time $t$&\\
+% $\mathcal{U}_{t}$ & Set of unemployed agents at time $t$&\\
+% $\mathcal{V}_{t}$ & Set of vacancies in the economy at time $t$&\\
+% $V_t^i \subseteq \mathcal{V}_t$& Vacancies relevant to agent $i$ at time $t$ &\\
+% $A_t^i \subseteq V_t^i$& Set of vacancies applied to by agent $i$ at time $t$ &\\
+% $w_j$ & Wage offered at vacancy $j$ &\\
+% $w_i$ & Current or previously held wage of agent $i$ &\\
+% $\rho_{ij}$ & occupational transition probability between agent $i$ and vacancy $j$ &\\
+% $\varphi_t$ & Labor market tightness at time $t$ ($\frac{\mathcal{V}_t}{\mathcal{U}_t}$) &\\
+% $u(w_{j})$ & Utility from a wage offer of vacancy $j$ &\\
+% $EU_i(w)$ & Expected utility for agent $i$ from wage $w$ &\\
+% $\lambda_i$ & Risk aversion coefficient for agent $i$ &\\
+% $\psi$ & Disutility from unemployment duration (scales reservation wage) &\\
+% $\tau_{i,t}$& Unemployment duration of individual $i$&\\
+% $\beta_{b,t}$& Belief of agent $i$ about re-employment probability at time $t$ &\\
+% $\alpha$ & Learning rate for belief updating &\\
+% $\omega$& Curvature parameter for belief updating function &\\
+% $\varepsilon$ & Acceptable probability of failure (risk tolerance threshold) &\\
+% & &\\
+% % $\bar{U}_i$ & Minimum acceptable expected utility threshold for applications &\\
+% $\bar{A}$ & Maximum number of applications an agent can send&\\
+% $P(h_{i,t} = 1)$ & Probability that agent $i$ is hired at time $t$ &\\
+% $\kappa$ & Threshold for market participation decision by employed searchers & \\
+% $m_{i,j}$ & Matching probability of worker i to vacancy j which is some function of labor market tightness.& \\
+% \hline
+% \end{tabular}
+% \caption{Table of Parameters and Definitions}
+% \label{tbl:parameters}
+% \end{table}
+
+
+
+%%%%%%%%%%%
+%old
+%%%%%%%%%%%%%
+
+% \subsection*{Global Values}
+
+% We consider two populations of job seekers and a pool of vacancies at each time step:
+% \[
+%   \mathcal{E}_t = \{\text{Employed Agents}\}, 
+%   \quad
+%   \mathcal{U}_t = \{\text{Unemployed Agents}\},  \quad 
+%   \mathcal{V}_t = \{\text{Vacancies}\}
+% \]
+
+% We determine labor market tightness as:
+% \[
+%   \varphi_t \;=\;\frac{|\mathcal{V}_t|}{|\mathcal{U}_t|}
+% \]
+
+% \subsection*{Unemployed Search}
+
+% % \begin{figure}
+%     \caption{Search Process of Unemployed Job-Seekers}
+%     \begin{tikzpicture}[node distance=2cm]
+%     \node (start) [startstop] {Begin time step unemployed};
+%     \node (pro1a) [process, below of=start] {Find $V_{t}^i \subseteq \mathcal{V}_{t|\rho_{ij} > 0}$};
+%     \node (pro1) [process, below of=pro1a] {Rank $V_{t}^i$};
+%     \node (in1) [io, left of=pro1, xshift = -3 cm] {$EU(u_{w}) = \rho \Delta wage$};
+%     \node (dec1) [decision, below of=pro1, yshift=-1cm] {Acceptable open vacancies $V_{t}^i$?};
+%     \node (pro2) [process, right of =dec1, yshift=2cm, xshift = 3 cm] {Update Beliefs \& Reservation Wage};
+%     \node (dec2) [process, below of=dec1, yshift=-1.5cm] {
+%     Pick smallest set $A_{t}^i \leq \bar{A}$ s.t\\$P(h_{i,t} = 1) \geq 1-\varepsilon$};
+%     \node (in2) [io, left of=dec2, xshift = -3 cm, yshift = -1 cm] {Subjective $\beta_{b, t}$};
+%     \node (in3) [io, left of=dec2, xshift = -2.5 cm, yshift = 1 cm] {Reservation Wage};
+%     \node (pro3) [process, below of =dec2]{Hired?};
+%     \node (stopemp) [startstop, below of = pro3, yshift = -1 cm, xshift = -3 cm] {End time step employed};
+%     \node (stopunemp) [startstop, below of = pro3, yshift = -1 cm, xshift = 3 cm] {End time step unemployed};
+    
+%     \draw [arrow] (start) -- (pro1a);
+%     \draw [arrow] (pro1a) -- (pro1);
+%     \draw [arrow] (in1) -- (pro1);
+%     \draw [arrow] (in2) -- (dec2);
+%     \draw [arrow] (pro1) -- (dec1);
+%     \draw [arrow] (dec2) -- (pro3);
+%     \draw [arrow] (dec1) -- node[anchor=east] {yes} (dec2);
+%     \draw [arrow] (stopunemp) -| node[anchor=north] {} ++(4,0) |- (pro2);
+%     \draw [arrow] (pro3) -- node[anchor=east] {yes} (stopemp);
+%     \draw [arrow] (pro3) -- node[anchor=east] {no} (stopunemp);
+%     \draw [arrow] (pro2) |- node[anchor=north] {} (start);
+%     \draw [arrow] (in3) -- (dec2);
+%     \draw [arrow] (dec1) -| node[anchor=north] {no} ++(4,0)  -| (pro2);
+%     %\draw [arrow] (dec2) --  node[anchor=east, above=2pt ] {} ++(7,0) |- (start);
+%     \end{tikzpicture}
+%     \label{fig:search_unemp_theoretical}
+% \end{figure}
+
+% Workers sample $V^i_t$  vacancies from neighboring occupations with probability $\rho_{ij}$. $V^i_t \subseteq \mathcal{V}_{t|\rho_{ij} > 0}$  such that the available vacancy set imposes imperfect information on the part of seekers. Workers then choose an application set $A^i_t\subseteq V^i_t$ as follows:
+
+% \begin{enumerate}
+% \item \textbf{Reservation Wage}: The individual sets a reservation wage $w_i^{reservation}$ scaled by parameter the product of $\psi_{i,t}$ which represents a disutility to unemployment (stigma, loss of confidence, financial precarity) and time spent unemployed beyond an acceptable threshold after which an individual considers adjusting their reservation wage down to increase re-employment success:
+%     \begin{equation}
+%         w_{it}^{reservation} = min\big(w_{i},  w_{i}(1 - \psi_t(\tau_{i,t} - \bar{\tau})\big)
+%       \end{equation}
+% and filter $V_t^i$ such that $w_j > w_{it}^{reservation}$. 
+
+% \textcolor{red}{The way this is currently structured, these can all be gathered from the CPS Discouraged Worker Supplement.}
+
+% \item \textbf{Vacancy Ranking} They rank each $v\in V^i_t$ according to utility function \ref{eq:EU_function_theoretical} which is a transformation of the wage differential scaled by match probability $m_{ij}\in[0,1]$ represented in Equation \ref{eq:utility_fn_theoretical}. This utility is incorporated into a ranking function resembling a von Neumann Morgenstern utility function, capturing attitudes toward risk in general although it is not applied here in an expected utility framework. 
+
+% \begin{equation}
+% u_{w} = m_{ij}( w_{j} - w_{i})
+% \label{eq:utility_fn_theoretical}
+% \end{equation}
+
+
+% \begin{equation}
+% U_i(u_{w}) =
+% \begin{cases}
+%   \dfrac{u_{w}^{1-\lambda_i}}{1-\lambda_i}, & \lambda_i \neq 1, \\[0.5em]
+%   \ln u_{w}, & \lambda_i = 1,
+% \end{cases}
+% \label{eq:EU_function_theoretical}
+% \end{equation}
+
+% where \( \lambda_i \) represents agent \( i \)'s risk aversion: \\
+%  \( \lambda_i > 0 \): risk averse (concave utility) \\
+%  \( \lambda_i < 0 \): risk seeking (convex utility) \\
+%  \( \lambda_i = 0 \): risk neutral (linear utility) \\
+
+
+% In practice, more similar (dissimilar) occupations or larger wage gains increase $u_w$ and hence expected utility, while lower similarity or smaller gains reduce it. \textcolor{violet}{I have chosen to go with the matching probability m here as we were stretching the capability of $\rho$ originally. Does the above make sense together as a utility ranking where the matching probability factors into the non-risk transformed utility?} 
+
+
+% \item \textbf{Per Vacancy Success Probability:}  For each vacancy \(v\), define
+    
+% \begin{equation}
+% P(v) = m_{ij} + \beta_{bt} 
+% \end{equation}
+
+% \color{red}
+% \begin{equation}
+% P(v) = m_{ij}\beta_{bt} 
+% \end{equation}
+% \color{black}
+% where $m_{ij}$ is the matching probability \textcolor{red}{(or some other baseline expectation about overall matching? Do we want  the relationship between $m_{ij}$ and $\beta_{bt}$ to be additive or multiplicative?)} and $\beta_{bt}$ is a subjective expected re-employment probability.  Subjective success belief evolves by the following function:
+%     \begin{equation}
+%         \beta_{b,t} = \beta_{b,t-1} + \alpha\bigl(h_{i,t-1}-\omega_{i,t-1}\bigr)
+%       \end{equation}
+% \begin{equation}
+%         \alpha = 1 - e^{-\omega t}
+%       \end{equation}
+% where $h_{i,t-1}=1$ if the previous application succeeded and \(\alpha\) exhibits concave learning (sticky beliefs) \textcolor{red}{($\alpha$ is universal and not individual-specific for now. For simplicity's sake, I'm inclined to keep it this way)}.  This functional form for $\alpha$ implies diminishing sensitivity over time, consistent with concave learning in line with the findings of \cite{muellerJobSeekersPerceptions2021} who demonstrate that job seekers’ beliefs are sticky and adjust slowly downward over time.
+
+% \item \textbf{Target Probability Rule:}
+%     The agent picks the smallest top-\(k\) set \(A^i_t\) such that
+%     \[
+%       1 - \prod_{v\in A^i_t}(1 - P_i(v)) \ge 1 - \varepsilon,
+%       \quad |A^i_t| \le \bar A.
+%     \]
+% This reflects the agent applying to the minimum number of top-ranked vacancies such that their expected probability of at least one success exceeds a threshold \( 1 - \varepsilon \). We define a maximum application effort $\bar{A}$ of \textcolor{red}{X} applications. 
+
+% \end{enumerate}
+
+% These rules impose that unemployment duration affects reservation wage setting and search effort through separate channels. Reservation wages are affected by unemployment duration directly whereas search effort is determined by an expected probability of re-employment which follows an adaptive learning process.
+
+% \textcolor{red}{In this example, are $P_i(v)$ and $m_{ij}$ equivalent or more explicitly related more than presented above?}
+
+% \subsection*{Employed Search}
+
+% Employed individuals are subject to a different decision given their relative employment security. Though they are similarly affected by their subjective beliefs about their re-employability, their initial decision about whether to actively engage in on-the-job search $P^{OTJ}_{it}$ is driven by their perception about perceived labor market tightness and attenuated by age given a decreased likelihood of switching jobs at older ages \textcolor{red}{Sources}. Their probability of applying is therefore represented by:
+
+% \begin{equation}
+% P^{OTJ}_{it}(age, \psi_t) = f(\varphi_{t}, age_i, \beta_{b,t})
+% \end{equation}
+% \begin{equation}
+% P^{OTJ}_{it}(age, \psi_t) = \frac{1}{1 + exp\Big( - \big[ \alpha + \beta_A (age_{it}) + \beta_{bt} \psi_t \big] \Big)} 
+% \end{equation}
+
+% ...where $\beta_A$ represents the steepness of propensity decline as a function of age and $\beta_{bt}$ represents a subjective belief about re-employability, identical to the attribute of unemployed workers. If $P^{OTJ}_{it} >  \kappa$, employed agent $i$ finds \( V_t^i \subseteq \mathcal{V}_t \) where elements of $ V_t^i $ are drawn from neighboring occupations with probability $\rho_{ij}$.  Suppose any vacancy \(j\) yields a match with probability $m_{ij}$.  If matched, employed agent \(i\) earns \(w_j\); if not, they remain at their current wage. Hence the \emph{expected utility} of applying to \(j\) is:
+% \[
+%   \mathrm{EU}_{i,j}
+%     = m_{i,j}\,u_i(w_j)
+%     \;+\;\bigl(1 - m_{i,j}\bigr)\,u_i\bigl(w_i\bigr).
+% \]
+
+% where $u_i(w)$ is defined according to a von Neumann Morgenstern utility function as outlined in Equation \ref{eq:EU_function_theoretical}. \textcolor{red}{Correct reference to the utility framework?}
+
+% Thus, employed workers will apply to the following vacancy set, also subject to a maximum possible application effort of $\bar{A}$ applications.
+% \[
+% A_t^i = \left\{ v \in V_t^i \;\middle|\; \mathbb{E}[U_{it}(v)] \geq \bar{U}_i \right\}
+% \]
+
+% \textcolor{red}{Do we need to impose a cost to search or is limiting the application set sufficient?}
+ % \end{document}
+
+ % % \textcolor{violet}{Stefi's suggestion to adjust R here. Not sure I understand?}
+% \begin{equation}
+% R_{i,t}\;= \max\;b_i, \min\big \{w_i^{\text{ref}},  (1-\psi \tau_{i,t})w_i^{\text{ref}}\big\}
+% \end{equation}
+% \begin{align}
+% R_{b,t}\;=\;\max\big \{ w underlined ,  (1-\psi \tau_{b,t})w_b^{\text{ref}}\big\}
+% \end{align}
